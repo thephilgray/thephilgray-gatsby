@@ -1,0 +1,71 @@
+backend:
+  name: github
+  branch: master
+  repo: thephilgray/thephilgray-gatsby
+
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: blog
+    label: Blog
+    folder: 'src/posts'
+    create: true
+    fields:
+      - { name: title, label: Title }
+      - { name: slug, label: 'Custom Slug' }
+      - { name: tags, label: tags }
+      - { name: date, label: Date, widget: date, format: 'YYYY-MM-DD' }
+      - { name: abstract, label: Abstract }
+      - { name: draft, label: Draft, widget: boolean }
+      - { name: body, label: Body, widget: markdown }
+  - name: projects
+    label: Projects
+    folder: 'src/projects'
+    create: true
+    fields:
+      - { name: title, label: Title }
+      - { name: slug, label: 'Custom Slug' }
+      - { name: tags, label: tags }
+      - { name: date, label: Date, widget: date, format: 'YYYY-MM-DD' }
+      - { name: abstract, label: Abstract }
+      - { name: category, label: Category }
+      - { name: draft, label: Draft, widget: boolean }
+      - { name: body, label: Body, widget: markdown }
+  - name: data
+    label: Data
+    files:
+      - label: Resume
+        name: resume
+        file: 'src/data/resume.yaml'
+        fields:
+          - { name: name, label: Name }
+          - { name: overview, label: Overview }
+          - { name: tools, label: Tools, widget: list }
+          - name: education
+            label: education
+            widget: list
+            fields:
+              - { name: title, label: Title }
+              - { name: location, label: Location }
+              - { name: degree, label: Degree }
+              - { name: years, label: Years }
+              - { name: concentration, label: Concentration }
+              - { name: honors, label: Honors }
+          - name: certifications
+            label: Certifications
+            widget: list
+            fields:
+              - { name: title, label: Title }
+              - { name: years, label: Years }
+          - name: experience
+            label: Experience
+            widget: list
+            fields:
+              - { name: company, label: Company }
+              - { name: years, label: Years }
+              - { name: location, label: Location }
+              - name: titles
+                label: Titles
+                widget: list
+              - { name: description, label: Description }
