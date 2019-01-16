@@ -1,0 +1,58 @@
+name: Phil Gray
+overview: Fullstack developer with frontend experience.
+tools:
+  - CSS3
+  - HTML5
+  - Figma
+  - PhotoShop
+  - JavaScript
+  - NodeJS
+  - Express
+  - React
+  - VueJS
+  - Webpack
+  - Git
+education:
+  - title: Virginia Commonwealth University
+    location: Richmond, VA
+    degree: B.A. English
+    years: 2005 – 2008
+    concentration: minor in Writing
+    honors: summa cum laude, 3.9 GPA
+certifications:
+  - title: '(MCSD: 70-480) Programming in HTML5 with JavaScript and CSS3'
+    years: '2014'
+  - title: Comp TIA Security+ Certification
+    years: '2013 – 2016, inactive'
+experience:
+  - company: National Capitol Contracting
+    years: 07/2018 – present
+    location: Arlington, VA
+    titles:
+      - ePublications Technical Specialist (onsite contractor at Department of State)
+    description: Designs and develops interactive EPUBs and e-book plugins using HTML5, CSS3, and JavaScript. Develops custom workflows and tools for testing, debugging, and enhancing developer experience with Node, Gulp, and Webpack.
+  - company: 'BSA | The Software Alliance'
+    years: 04/2015 – 07/2018
+    location: Washington, DC
+    titles:
+      - Digital Manager, 04/2015 - 11/2017
+      - Independent Consultant, 11/2017 - 07/2018
+    description: Managed sites for global organization and helped launch its foundation, Software.org. Oversaw content management, development, reporting, and migrations. Designed and developed interactive features, themes, emails, surveys, and microsites.
+  - company: ProSol
+    years: 11/2014 – 04/2015
+    location: Washington, DC
+    titles:
+      - Release Management Coordinator, Data Specialist (onsite contractor at Department of Labor)
+    description: Coordinated testing and deployment with federal customer and developers. Supported the technology team with application testing, workflow analysis, reporting, data entry, data analysis, and documentation.
+  - company: BAE Systems IT
+    years: 04/2014 – 11/2014
+    location: Herndon, VA
+    titles:
+      - Technical Writer (contractor)
+    description: Supported the Service Management and Engineering Framework Management teams, helping to maintain and improve ITIL-based policies, processes, and procedures.
+  - company: ITPDX
+    years: 12/2010 – 04/2014
+    location: Portland, Oregon
+    titles:
+      - Web Content Editor, Technical Writer, Copywriter (independent consultant)
+    description: Wrote user and API documentation for custom e-commerce solutions. Provided web content management and training.
