@@ -1,10 +1,12 @@
 module.exports = {
   siteMetadata: {
     title: `thephilgray`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    description: `Phil Gray's web development portfolio/blog`,
     author: `@thephilgray`,
+    siteUrl: `https://thephilgray.com`,
   },
   plugins: [
+    `gatsby-plugin-sitemap`,
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
