@@ -10,6 +10,7 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-plugin-styled-components`,
     `gatsby-transformer-yaml`,
+    `gatsby-plugin-netlify-cms`,
     {
       resolve: `gatsby-plugin-layout`,
       options: {
