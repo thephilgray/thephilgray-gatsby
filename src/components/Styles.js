@@ -89,6 +89,10 @@ export const GlobalStyle = createGlobalStyle`
   span {
     font-variant-numeric: oldstyle-nums;
   }
+
+  :not(pre)>code[class*=language-]{
+    word-break: break-word;
+  }
   
 
   `
