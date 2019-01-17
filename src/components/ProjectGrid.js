@@ -6,9 +6,9 @@ import ProjectGridItem from './ProjectGridItem'
 import { slugFilter } from '../lib/filters'
 
 const Grid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
 `
 
 const PROJECT_POST_LISTING = graphql`
