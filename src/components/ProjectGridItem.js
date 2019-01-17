@@ -8,8 +8,6 @@ const ProjectGridItemLayout = styled.div`
   height: 400px;
   position: relative;
   overflow: hidden;
-  flex: 1 0 auto;
-  width: 100%;
   margin: 0.5em;
   display: flex;
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
@@ -24,21 +22,12 @@ const ProjectGridItemLayout = styled.div`
     color: ${({ theme }) => theme.orange};
     z-index: 100;
   }
-
-  @media screen and (min-width: 1200px) {
-    width: 20%;
-    margin: 1em;
-  }
 `
 
 const ProjectGridItemContent = styled.div`
-  border-radius: 2px;
-  min-width: 0;
-  position: relative;
-  text-decoration: none;
-
-  padding: 1em;
   display: flex;
+  position: relative;
+  padding: 1em;
   background-image: ${({ theme }) =>
     `linear-gradient(180deg, hsla(0, 0%, 100%, 0.9), ${theme.lightBlue})`};
   background-attachment: scroll;
