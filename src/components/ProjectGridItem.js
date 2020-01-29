@@ -38,6 +38,9 @@ const ProjectGridItemContent = styled.div`
   background-repeat: no-repeat;
   flex-wrap: wrap;
   background-blend-mode: normal;
+  h4, p{
+    width: 100%;
+  }
 `
 
 const ProjectGridItemBackground = styled.div`
