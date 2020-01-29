@@ -31,7 +31,7 @@ const PostListing = ({ post }) => (
   <div className="posts">
     <article className="post">
       <PostHeader className="post__header">
-        <Link to={`blog/${post.frontmatter.slug}`}>
+        <Link to={`/blog/${post.frontmatter.slug}`}>
           <h2 className="post__title">{post.frontmatter.title}</h2>
         </Link>
         <p className="post__date">{post.frontmatter.date}</p>

@@ -208,7 +208,7 @@ const Resume = () => (
                 <h2>Tools</h2>
                 <p className="tools__text">
                   {tools.map((tool, i) => (
-                    <span key={tool}>{`${tool +
+                    <span key={tool || `tool-${i}`}>{`${tool +
                       (i === tools.length - 1 ? '' : ', ')}`}</span>
                   ))}
                 </p>
@@ -219,8 +219,8 @@ const Resume = () => (
             </ResumeSection> */}
             <ResumeSection>
               <h2>Education</h2>
-              {education.map(school => (
-                <p>
+              {education.map((school, i) => (
+                <p key={school.title || `school-${i}`}>
                   {school.title}, {school.location}
                   <br />
                   {school.degree} ({school.years}), {school.concentration},{' '}
@@ -231,21 +231,21 @@ const Resume = () => (
             <ResumeSection>
               <h2>Certifications</h2>
               <p>
-                {certifications.map(cert => (
-                  <>
+                {certifications.map((cert, i) => (
+                  <React.Fragment key={cert.title || `cert-${i}`}>
                     <span>
                       {cert.title} ({cert.years})
                     </span>
                     <br />
-                  </>
+                  </React.Fragment>
                 ))}
               </p>
             </ResumeSection>
             <ResumeSection pageBreak>
               <h2>Relevant Experience</h2>
               <RelevantExperienceLayout>
-                {experience.map(ex => (
-                  <RelevantExperienceItem>
+                {experience.map((ex, i) => (
+                  <RelevantExperienceItem key={ex.company || `ex-${i}`}>
                     <div className="relevant-experience__info">
                       <span className="relevant-experience__years">
                         {ex.years}
@@ -255,8 +255,8 @@ const Resume = () => (
                       </div>
                     </div>
                     <h3>{ex.company}</h3>
-                    {ex.titles.map(jobTitle => (
-                      <h4>{jobTitle}</h4>
+                    {ex.titles.map((jobTitle, i) => (
+                      <h4 key={jobTitle || `jobTitle-${i}`}>{jobTitle}</h4>
                     ))}
                     <p>{ex.description}</p>
                   </RelevantExperienceItem>

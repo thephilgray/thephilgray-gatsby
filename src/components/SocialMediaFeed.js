@@ -16,7 +16,6 @@ export default class SocialMediaFeed extends Component {
     /* Get the last 3 posts and order them from newest to oldest */
 
     const latestPosts = data.feed.entry.slice(-3).reverse()
-    console.log(latestPosts)
     this.setState({ latestPosts })
   }
 

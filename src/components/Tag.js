@@ -18,7 +18,7 @@ function Tag({ tagName, linked, more }) {
   return (
     <StyledTag>
       {linked ? (
-        <Link to={more ? `tags/` : `tags/${slugFilter(tagName)}`}>
+        <Link to={more ? `/tags/` : `/tags/${slugFilter(tagName)}`}>
           {tagName}
         </Link>
       ) : (

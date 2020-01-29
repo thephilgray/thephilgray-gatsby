@@ -13,9 +13,9 @@ function TagPage({ pageContext, location }) {
       {pageContext.filteredProjects && (
         <>
           <h2>Projects</h2>
-          {pageContext.filteredProjects.map(project => (
+          {pageContext.filteredProjects.map((project, i) => (
             <Link
-              key={project.frontmatter.slug}
+              key={project.frontmatter.slug || `project-${i}`}
               to={`/projects/${project.frontmatter.slug ||
                 slugFilter(project.frontmatter.title)}`}
             >
@@ -28,9 +28,9 @@ function TagPage({ pageContext, location }) {
       {pageContext.filteredPosts && (
         <>
           <h2>Posts</h2>
-          {pageContext.filteredPosts.map(post => (
+          {pageContext.filteredPosts.map((post, i) => (
             <Link
-              key={post.frontmatter.slug}
+              key={post.frontmatter.slug || `post-${i}`}
               to={`/blog/${post.frontmatter.slug ||
                 slugFilter(post.frontmatter.title)}`}
             >
