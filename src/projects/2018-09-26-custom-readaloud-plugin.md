@@ -4,7 +4,7 @@ abstract: A frontend plugin designed as a text and audio synchronization alterna
 category: work
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/customreadaloud.png
 tags: JavaScript, EPUB, E-books, Webpack
-published: true
+date: 2018-09-26
 ---
 
 ### Overview

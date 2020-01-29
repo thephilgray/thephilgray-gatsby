@@ -6,7 +6,7 @@ abstract: >-
 category: demo
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/Image+2018-08-07+at+6.17.14+PM.png
 tags: JavaScript, Redux, SASS, CSS
-published: true
+date: 2018-08-07
 ---
 
 This little app takes an array of questions and answers and produces an interactive quiz. A list of answer choices with the correct answer specified needs to be included with each question. If multiple answer choices are marked correct, it will automatically render it as a multiple choice question with checkboxes.

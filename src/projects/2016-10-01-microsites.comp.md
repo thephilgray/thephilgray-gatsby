@@ -5,6 +5,7 @@ category: work
 abstract: Create responsive sites from print handouts meant to educate policymakers about the value of encryption and software.
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/%5Bb1cc2a8f0861d9bb47926d01103af9f4%5D_encryption2.png
 tags: SASS, SMACSS, Responsive Design, jQuery
+date: 2016-10-01
 ---
 
 - Extract colors, images, and icons from PDFs and illustrator files

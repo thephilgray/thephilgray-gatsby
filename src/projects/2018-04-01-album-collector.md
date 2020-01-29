@@ -5,6 +5,7 @@ abstract: An app for posting and sharing reviews of your favorite albums.
 category: demo
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/Image+2018-06-08+at+8.14.28+PM.png
 tags: Node, React, VueJS, Redux, Vuex, Storybook, Axios, Styled Components, SASS, SVG, MongoDB, Prisma, GraphQL, FireBase, Serverless
+date: 2018-04-01
 ---
 
 ##### Inspiration
