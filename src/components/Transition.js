@@ -5,7 +5,11 @@ import {
   Transition as ReactTransition,
 } from 'react-transition-group'
 
-const timeout = 250
+const timeout = 200
+const defaultStyle = {
+  transition: `opacity ${timeout}ms ease-in-out`,
+  opacity: 0
+}
 const getTransitionStyles = {
   entering: {
     position: `absolute`,
@@ -19,6 +23,7 @@ const getTransitionStyles = {
     transition: `opacity ${timeout}ms ease-in-out`,
     opacity: 0,
   },
+  exited:  { opacity: 0 },
 }
 
 class Transition extends React.PureComponent {
@@ -37,6 +42,7 @@ class Transition extends React.PureComponent {
           {status => (
             <div
               style={{
+                ...defaultStyle,
                 ...getTransitionStyles[status],
               }}
             >
