@@ -4,11 +4,9 @@ abstract: >-
   This little app takes an array of questions and answers and produces an
   interactive quiz.
 category: demo
-image: >-
-  https://dzwonsemrish7.cloudfront.net/items/3l30012E2P3C1G3O330h/Image%202018-08-07%20at%206.17.14%20PM.png?v=ab2e4c47
+image: https://s3.amazonaws.com/pg-image-host/thepg/screens/Image+2018-08-07+at+6.17.14+PM.png
 tags: JavaScript, Redux, SASS, CSS
-draft: false
-slug: vanilla-quiz-module-with-redux-and-local-storage
+published: true
 ---
 
 This little app takes an array of questions and answers and produces an interactive quiz. A list of answer choices with the correct answer specified needs to be included with each question. If multiple answer choices are marked correct, it will automatically render it as a multiple choice question with checkboxes.

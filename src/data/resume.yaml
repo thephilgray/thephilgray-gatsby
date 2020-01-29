@@ -1,17 +1,13 @@
 name: Phil Gray
-overview: Fullstack developer with frontend experience.
+overview: HTML/CSS/JS/NodeJS Developer with design and full-stack skills 
 tools:
-  - CSS3
   - HTML5
-  - Figma
-  - PhotoShop
+  - CSS3
   - JavaScript
   - NodeJS
-  - Express
   - React
   - VueJS
-  - Webpack
-  - Git
+  - Figma
 education:
   - title: Virginia Commonwealth University
     location: Richmond, VA
@@ -25,8 +21,14 @@ certifications:
   - title: Comp TIA Security+ Certification
     years: '2013 – 2016, inactive'
 experience:
+  - company: Generali Global Assistance North America
+    years: 09/2019 – present
+    location: Washington, DC
+    titles:
+      - Frontend (JavaScript/React) Web Developer (contractor)
+    description: Develops frontend solutions for a B2B2C identity management app.
   - company: National Capitol Contracting
-    years: 07/2018 – present
+    years: 07/2018 – 09/2019
     location: Arlington, VA
     titles:
       - ePublications Technical Specialist (onsite contractor at Department of State)
