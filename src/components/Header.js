@@ -68,10 +68,9 @@ const Header = ({ location }) => (
       </Link>
     </SiteLogo>
     <StyledNav>
-      <Link to="/">Latest</Link>
       <Link
         to="/blog"
-        aria-current={location.pathname.split('/').includes('blog') && 'page'}
+        aria-current={(location.pathname === '/' || location.pathname.split('/').includes('blog')) && 'page'}
       >
         Blog
       </Link>

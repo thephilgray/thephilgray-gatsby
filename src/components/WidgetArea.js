@@ -32,9 +32,7 @@ const WidgetArea = () => (
     <InfoWidget>
       <h3>Phil Gray</h3>
       <p>
-        <em>Web Developer </em>
-        <br />
-        <span>Node + React/Vue + CSS</span>
+        <em>Full-stack engineer</em>
       </p>
       <div className="socialFollow">
         <a href="https://twitter.com/thephilgray" alt="Follow me on Twitter">

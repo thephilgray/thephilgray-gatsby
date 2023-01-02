@@ -1,13 +1,14 @@
 name: Phil Gray
-overview: HTML/CSS/JS/NodeJS Developer with design and full-stack skills 
+overview: Full-stack engineer with expertise in serverless web services, JavaScript, and frontend.
 tools:
-  - HTML5
-  - CSS3
+  - AWS
   - JavaScript
-  - NodeJS
+  - TypeScript
+  - Node
+  - Python
+  - Java
   - React
   - VueJS
-  - Figma
 education:
   - title: Virginia Commonwealth University
     location: Richmond, VA
@@ -16,17 +17,28 @@ education:
     concentration: minor in Writing
     honors: summa cum laude, 3.9 GPA
 certifications:
+  - title: AWS Certified Solutions Architect – Associate
+    years: '2021 – 2024'
+  - title: AWS Certified Cloud Practitioner
+    years: '2020 – 2023'
   - title: '(MCSD: 70-480) Programming in HTML5 with JavaScript and CSS3'
     years: '2014'
   - title: Comp TIA Security+ Certification
     years: '2013 – 2016, inactive'
 experience:
+  - company: Capital One
+    years: 04/2021 – present
+    location: McLean, VA
+    titles:
+      - Software Engineer, Senior Associate
+    description: Develops and maintains numerous web services and full-stack solutions in the small business card acquisitions space.
   - company: Generali Global Assistance North America
-    years: 09/2019 – present
+    years: 09/2019 – 04/2021
     location: Washington, DC
     titles:
-      - Frontend (JavaScript/React) Web Developer (contractor)
-    description: Develops frontend solutions for a B2B2C identity management app.
+      - Fullstack Engineer, 04/2020 – 04/2021
+      - Frontend Developer, 09/2019 – 04/2020
+    description: Developed frontend features and tooling, contributed to microservices and serverless AWS infrastructure, and performed production releases.
   - company: National Capitol Contracting
     years: 07/2018 – 09/2019
     location: Arlington, VA
