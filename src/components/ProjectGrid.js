@@ -54,7 +54,7 @@ const ProjectGrid = () => (
               description={abstract || excerpt}
               tags={tags.split(', ')}
               image={image}
-              link={`projects/${projectSlug}`}
+              link={`/projects/${projectSlug}`}
             />
           )
         })
