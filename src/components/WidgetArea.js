@@ -4,7 +4,8 @@ import TopTags from './TopTags'
 import InfoWidget from './InfoWidget'
 import ProfileImage from './ProfileImage'
 import GithubIcon from '../images/github.svg'
-import TwitterIcon from '../images/twitter.svg'
+// import TwitterIcon from '../images/twitter.svg'
+import LinkedInIcon from '../images/linkedin.svg'
 
 const WidgetAreaWrapper = styled.aside`
   background-image: ${({ theme }) =>
@@ -35,12 +36,20 @@ const WidgetArea = () => (
         <em>Full-stack engineer</em>
       </p>
       <div className="socialFollow">
-        <a
+        {/* Anyone still using Twitter? */}
+        {/* <a
           href="https://twitter.com/thephilgray"
           alt="Follow me on Twitter"
           target="_blank"
         >
           <img src={TwitterIcon} alt="Twitter icon" />
+        </a> */}
+        <a
+          href="https://www.linkedin.com/in/philgrayphilgray/"
+          alt="Connect with me on LinkedIn"
+          target="_blank"
+        >
+          <img src={LinkedInIcon} alt="LinkedIn icon" />
         </a>
         <a
           href="https://github.com/thephilgray"
