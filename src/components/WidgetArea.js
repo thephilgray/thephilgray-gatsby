@@ -35,10 +35,18 @@ const WidgetArea = () => (
         <em>Full-stack engineer</em>
       </p>
       <div className="socialFollow">
-        <a href="https://twitter.com/thephilgray" alt="Follow me on Twitter">
+        <a
+          href="https://twitter.com/thephilgray"
+          alt="Follow me on Twitter"
+          target="_blank"
+        >
           <img src={TwitterIcon} alt="Twitter icon" />
         </a>
-        <a href="https://github.com/thephilgray" alt="Follow me on Github">
+        <a
+          href="https://github.com/thephilgray"
+          alt="Follow me on Github"
+          target="_blank"
+        >
           <img src={GithubIcon} alt="Github icon" />
         </a>
       </div>

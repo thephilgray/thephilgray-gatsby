@@ -15,7 +15,9 @@ export default function SiteFooter() {
       <div>
         <p>
           © <span>2019</span> Phil Gray |{' '}
-          <a href="https://github.com/thephilgray">View Source</a>
+          <a href="https://github.com/thephilgray" target="_blank">
+            View Source
+          </a>
         </p>
       </div>
     </FooterWrapper>

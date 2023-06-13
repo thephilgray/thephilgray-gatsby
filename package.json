@@ -21,6 +21,7 @@
     "gatsby-plugin-sharp": "^2.0.17",
     "gatsby-plugin-sitemap": "^2.0.4",
     "gatsby-plugin-styled-components": "^3.0.4",
+    "gatsby-remark-external-links": "^0.0.4",
     "gatsby-remark-prismjs": "^3.2.0",
     "gatsby-source-filesystem": "^2.0.16",
     "gatsby-transformer-remark": "^2.2.0",
@@ -42,8 +43,8 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && gatsby build",
-    "develop": "export SET NODE_OPTIONS=--openssl-legacy-provider && gatsby develop",
+    "build": "gatsby build",
+    "develop": "gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",
     "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
