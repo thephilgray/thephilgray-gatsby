@@ -11,46 +11,38 @@ exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
 
   return new Promise((resolve, reject) => {
-    graphql(`
-      query {
-        blogposts: allMarkdownRemark(
-          sort: { order: DESC, fields: [frontmatter___date] }
-          filter: {
-            frontmatter: { draft: { ne: true } }
-            fileAbsolutePath: { regex: "/posts/" }
-          }
-        ) {
-          edges {
-            node {
-              frontmatter {
-                title
-                slug
-                tags
-              }
-              id
-            }
-          }
+    graphql(`{
+  blogposts: allMarkdownRemark(
+    sort: {frontmatter: {date: DESC}}
+    filter: {frontmatter: {draft: {ne: true}}, fileAbsolutePath: {regex: "/posts/"}}
+  ) {
+    edges {
+      node {
+        frontmatter {
+          title
+          slug
+          tags
         }
-        projects: allMarkdownRemark(
-          sort: { order: DESC, fields: [frontmatter___date] }
-          filter: {
-            frontmatter: { draft: { ne: true } }
-            fileAbsolutePath: { regex: "/projects/" }
-          }
-        ) {
-          edges {
-            node {
-              frontmatter {
-                title
-                slug
-                tags
-              }
-              id
-            }
-          }
-        }
+        id
       }
-    `).then(({ data, errors }) => {
+    }
+  }
+  projects: allMarkdownRemark(
+    sort: {frontmatter: {date: DESC}}
+    filter: {frontmatter: {draft: {ne: true}}, fileAbsolutePath: {regex: "/projects/"}}
+  ) {
+    edges {
+      node {
+        frontmatter {
+          title
+          slug
+          tags
+        }
+        id
+      }
+    }
+  }
+}`).then(({ data, errors }) => {
       if (errors) {
         return reject(errors)
       }
@@ -116,5 +108,5 @@ exports.createPages = ({ graphql, actions }) => {
       })
       resolve()
     })
-  })
+  });
 }

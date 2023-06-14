@@ -11,32 +11,27 @@ const Grid = styled.div`
   grid-gap: 20px;
 `
 
-const PROJECT_POST_LISTING = graphql`
-  query PROJECT_POST_LISTING {
-    allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___date] }
-      filter: {
-        frontmatter: { draft: { ne: true } }
-        fileAbsolutePath: { regex: "/projects/" }
-      }
-    ) {
-      edges {
-        node {
-          frontmatter {
-            title
-            slug
-            date(formatString: "MMMM DD, YYYY")
-            tags
-            abstract
-            image
-          }
-          excerpt
-          id
+const PROJECT_POST_LISTING = graphql`query PROJECT_POST_LISTING {
+  allMarkdownRemark(
+    sort: {frontmatter: {date: DESC}}
+    filter: {frontmatter: {draft: {ne: true}}, fileAbsolutePath: {regex: "/projects/"}}
+  ) {
+    edges {
+      node {
+        frontmatter {
+          title
+          slug
+          date(formatString: "MMMM DD, YYYY")
+          tags
+          abstract
+          image
         }
+        excerpt
+        id
       }
     }
   }
-`
+}`
 
 const ProjectGrid = () => (
   <Grid>
