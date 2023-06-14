@@ -164,7 +164,7 @@ pages
 
 - In the `/blog/index.vue` page component, you want to get data for all of the blog posts, so specify `/blog` as the query and use the `getAll` method on the return object from the `$content` method of the `app`, the destructured Vue instance received by `asyncData`.
 
-```vue
+```html
 <template lang="pug">
 section.posts
     h2 All blog posts
@@ -174,14 +174,14 @@ section.posts
 </template>
 
 <script>
-// pages/blog/index.vue
-export default {
-  async asyncData({ app }) {
-    return {
-      posts: await app.$content('/blog').getAll(),
-    }
-  },
-}
+  // pages/blog/index.vue
+  export default {
+    async asyncData({ app }) {
+      return {
+        posts: await app.$content('/blog').getAll(),
+      }
+    },
+  }
 </script>
 ```
 
@@ -193,7 +193,7 @@ Whatever you return from `asyncData` will be merged with the component's `data` 
 
 - In the `/blog/_slug/index.vue` page component, you want to get data for only blog post that matches the current path, so again specify `/blog` as the initial query string, but this time use the `get` method, passing in `route.path`. You will also need to destructure `route` in addition to `app` from the `context` object in `asyncData` to get the route path information.
 
-```vue
+```html
 <template lang="pug">
 article.fullPost
     h2.fullPost__title {{post.title}}
@@ -202,14 +202,14 @@ article.fullPost
 </template>
 
 <script>
-// pages/blog/_slug/index.vue
-export default {
-  async asyncData({ app, route }) {
-    return {
-      post: await app.$content('/blog').get(route.path),
-    }
-  },
-}
+  // pages/blog/_slug/index.vue
+  export default {
+    async asyncData({ app, route }) {
+      return {
+        post: await app.$content('/blog').get(route.path),
+      }
+    },
+  }
 </script>
 ```
 

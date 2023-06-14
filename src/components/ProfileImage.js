@@ -1,37 +1,13 @@
 import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
-import Img from 'gatsby-image'
-
-/*
- * This component is built using `gatsby-image` to automatically serve optimized
- * images with lazy loading and reduced file sizes. The image is loaded using a
- * `StaticQuery`, which allows us to load the image from directly within this
- * component, rather than having to pass the image data down from pages.
- *
- * For more information, see the docs:
- * - `gatsby-image`: https://gatsby.app/gatsby-image
- * - `StaticQuery`: https://gatsby.app/staticquery
- */
+import { StaticImage } from 'gatsby-plugin-image'
 
 const Image = () => (
-  <StaticQuery
-    query={graphql`
-      query {
-        placeholderImage: file(relativePath: { eq: "profile.png" }) {
-          childImageSharp {
-            fixed(width: 180) {
-              ...GatsbyImageSharpFixed
-            }
-          }
-        }
-      }
-    `}
-    render={data => (
-      <Img
-        alt="headshot of Phil Gray"
-        fixed={data.placeholderImage.childImageSharp.fixed}
-      />
-    )}
+  <StaticImage
+    src="../images/profile.png"
+    alt="headshot of Phil Gray"
+    placeholder="blurred"
+    layout="fullWidth"
+    width={200}
   />
 )
 export default Image
