@@ -9,12 +9,14 @@ const FooterWrapper = styled.footer`
   }
 `
 
+const currentYear = new Date().getFullYear()
+
 export default function SiteFooter() {
   return (
     <FooterWrapper>
       <div>
         <p>
-          © <span>2019</span> Phil Gray |{' '}
+          © <span>{currentYear}</span> Phil Gray |{' '}
           <a href="https://github.com/thephilgray" target="_blank">
             View Source
           </a>

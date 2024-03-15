@@ -33,7 +33,7 @@ const WidgetArea = () => (
     <InfoWidget>
       <h3>Phil Gray</h3>
       <p>
-        <em>Full-stack engineer</em>
+        <em>Fullstack software engineer</em>
       </p>
       <div className="socialFollow">
         {/* Anyone still using Twitter? */}
