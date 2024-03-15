@@ -8,10 +8,11 @@ tools:
   - React
   - VueJS
   - CSS
-  - AWS (Lambda, ECS, S3, SQS, DynamoDB, ElasticSearch, ElastiCache, CloudWatch)
+  - Jest, Cypress, Nightwatch, Cucumber
+  - AWS (Lambda, ECS, S3, SQS, DynamoDB, ElasticSearch, ElastiCache, CloudWatch, API Gateway)
   - IaC (Terraform, CloudFormation, CDK)
   - Docker
-  - shell
+  - shell scripting
 education:
   - title: Virginia Commonwealth University
     location: Richmond, VA
@@ -23,7 +24,7 @@ certifications:
   - title: AWS Certified Solutions Architect – Associate
     years: '2021 – 2024'
   - title: AWS Certified Cloud Practitioner
-    years: '2020 – 2023'
+    years: '2020 – 2023, inactive'
   - title: '(MCSD: 70-480) Programming in HTML5 with JavaScript and CSS3'
     years: '2014'
   - title: Comp TIA Security+ Certification
