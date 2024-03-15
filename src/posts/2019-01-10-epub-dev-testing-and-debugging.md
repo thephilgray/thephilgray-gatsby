@@ -3,6 +3,7 @@ title: EPUB Dev Testing and Debugging
 slug: epub-dev-testing-and-debugging
 tags: EPUB, E-books, Node, JavaScript, Testing, Cypress, CLI, Android, Mobile
 abstract: Approaches to testing and debugging scripted EPUBs during development, including in the browser, Apple Books, emulators, and physical devices. Also, introduces two small tools I created to improve development experience.
+date: 2019-01-10
 draft: false
 ---
 
@@ -53,16 +54,16 @@ I was able to run some basic tests, but honestly, I haven't found a practical wa
 
 module.exports = (on, config) => {
   on('before:browser:launch', (browser = {}, args) => {
-    console.log(browser, args); // see what all is in here!
+    console.log(browser, args) // see what all is in here!
 
     if (browser.name === 'chrome') {
-      args.push('--disable-site-isolation-trials');
+      args.push('--disable-site-isolation-trials')
 
       // whatever you return here becomes the new args
-      return args;
+      return args
     }
-  });
-};
+  })
+}
 
 // example unit test
 
@@ -70,17 +71,17 @@ module.exports = (on, config) => {
 
 context('Actions', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/index.html?epub=epub_content/test-ebook');
-  });
+    cy.visit('http://localhost:3000/index.html?epub=epub_content/test-ebook')
+  })
 
   it('Renders the ebook cover page', () => {
-    cy.wait(3000); // allow some time for Readium to load the epub
+    cy.wait(3000) // allow some time for Readium to load the epub
     cy.get('#epub-reader-frame iframe').then(iframe => {
-      const doc = iframe.contents();
-      doc.get('#cover');
-    });
-  });
-});
+      const doc = iframe.contents()
+      doc.get('#cover')
+    })
+  })
+})
 ```
 
 See also: [Ace](https://github.com/daisy/ace), an awesome new tool for EPUB accessibility testing.
