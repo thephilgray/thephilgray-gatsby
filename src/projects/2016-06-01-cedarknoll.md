@@ -6,6 +6,7 @@ abstract: Create an attractive responsive landing page to help establish a new r
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/%5Be7abeed79108311a7bf9b3b91ee1e977%5D_ck.png
 tags: SASS, Gulp, Responsive Design, Copywriting, Digital Marketing, SVG
 date: 2016-06-01
+archived: true
 ---
 
 - Design and develop site using Gulp and SASS

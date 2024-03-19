@@ -11,48 +11,60 @@ const Grid = styled.div`
   grid-gap: 20px;
 `
 
-const PROJECT_POST_LISTING = graphql`query PROJECT_POST_LISTING {
-  allMarkdownRemark(
-    sort: {frontmatter: {date: DESC}}
-    filter: {frontmatter: {draft: {ne: true}}, fileAbsolutePath: {regex: "/projects/"}}
-  ) {
-    edges {
-      node {
-        frontmatter {
-          title
-          slug
-          date(formatString: "MMMM DD, YYYY")
-          tags
-          abstract
-          image
+const PROJECT_POST_LISTING = graphql`
+  query PROJECT_POST_LISTING {
+    allMarkdownRemark(
+      sort: { frontmatter: { date: DESC } }
+      filter: {
+        frontmatter: { draft: { ne: true }, archived: { ne: true } }
+        fileAbsolutePath: { regex: "/projects/" }
+      }
+    ) {
+      edges {
+        node {
+          frontmatter {
+            title
+            slug
+            date(formatString: "MMMM DD, YYYY")
+            tags
+            abstract
+            image
+          }
+          excerpt
+          id
         }
-        excerpt
-        id
       }
     }
   }
-}`
+`
 
 const ProjectGrid = () => (
   <Grid>
     <StaticQuery
       query={PROJECT_POST_LISTING}
       render={({ allMarkdownRemark }) =>
-        allMarkdownRemark.edges.map(({ node }) => {
-          const { id, frontmatter } = node
-          const { title, abstract, excerpt, tags, image, slug } = frontmatter
-          const projectSlug = slug || slugFilter(title)
-          return (
-            <ProjectGridItem
-              key={id}
-              title={title}
-              description={abstract || excerpt}
-              tags={tags.split(', ')}
-              image={image}
-              link={`/projects/${projectSlug}`}
-            />
-          )
-        })
+        allMarkdownRemark.edges.length ? (
+          allMarkdownRemark.edges.map(({ node }) => {
+            const { id, frontmatter } = node
+            const { title, abstract, excerpt, tags, image, slug } = frontmatter
+            const projectSlug = slug || slugFilter(title)
+            return (
+              <ProjectGridItem
+                key={id}
+                title={title}
+                description={abstract || excerpt}
+                tags={tags.split(', ')}
+                image={image}
+                link={`/projects/${projectSlug}`}
+              />
+            )
+          })
+        ) : (
+          <p>
+            All the stuff that was here was a few years old. Currently working
+            on creating new content for this site. Check back soon.
+          </p>
+        )
       }
     />
   </Grid>

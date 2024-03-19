@@ -4,6 +4,7 @@ abstract: Learning VueJS.
 category: personal
 tags: VueJS, Vuex, Bootstrap
 date: 2017-05-01
+archived: true
 ---
 
 #### Stock Trader App

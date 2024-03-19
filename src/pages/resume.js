@@ -71,7 +71,7 @@ const ResumeLayout = styled.div`
   }
 
   @media print {
-    font-size: 90%;
+    font-size: 50%;
 
     header {
       display: flex;
@@ -81,6 +81,10 @@ const ResumeLayout = styled.div`
 
       h1 {
         padding-right: 1em;
+        margin: 0;
+      }
+
+      p {
         margin: 0;
       }
 
@@ -241,7 +245,7 @@ const Resume = () => (
                 ))}
               </p>
             </ResumeSection>
-            <ResumeSection pageBreak>
+            <ResumeSection pageBreak={false}>
               <h2>Relevant Experience</h2>
               <RelevantExperienceLayout>
                 {experience.map((ex, i) => (

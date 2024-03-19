@@ -7,6 +7,7 @@ category: personal
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/Image+2018-06-08+at+8.16.37+PM.png
 tags: VueJS, Nuxt, Axios, SASS, SVG, CSS
 date: 2017-09-01
+archived: true
 ---
 
 - Design responsive layout with CSS Grid

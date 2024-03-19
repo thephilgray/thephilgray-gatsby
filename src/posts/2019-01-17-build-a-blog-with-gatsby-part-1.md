@@ -7,6 +7,7 @@ abstract: >-
   basic setup and getting the blog up functionality and running.
 date: 2019-01-17
 draft: false
+archived: true
 ---
 
 The repo for this project can be found here: [https://github.com/thephilgray/thephilgray-gatsby](https://github.com/thephilgray/thephilgray-gatsby)
@@ -48,17 +49,17 @@ plugins: [
     resolve: `gatsby-source-filesystem`,
     options: {
       name: `images`,
-      path: `${__dirname}/src/images`
-    }
+      path: `${__dirname}/src/images`,
+    },
   },
   {
     resolve: `gatsby-source-filesystem`,
     options: {
       name: `posts`,
-      path: `${__dirname}/src/posts`
-    }
-  }
-];
+      path: `${__dirname}/src/posts`,
+    },
+  },
+]
 ```
 
 Install `gatsby-transformer-remark`
@@ -76,11 +77,11 @@ plugins: [
     resolve: `gatsby-source-filesystem`,
     options: {
       name: `posts`,
-      path: `${__dirname}/src/posts`
-    }
+      path: `${__dirname}/src/posts`,
+    },
   },
-  `gatsby-transformer-remark`
-];
+  `gatsby-transformer-remark`,
+]
 ```
 
 Restart `gatsby develop` so that the `posts` directory is read. You do not need to restart for new values and files, but you do for new config properties and new yaml fields to register.
@@ -121,9 +122,9 @@ Since the `StaticQuery` component can be used in any component and because our q
 Pass a function to the `StaticQuery` component's `render` prop from which we can destructure the `allMarkdownRemark` object from `data` and map over it.
 
 ```js
-import React from 'react';
-import { StaticQuery, graphql } from 'gatsby';
-import BlogPostListingItem from './BlogPostListingItem';
+import React from 'react'
+import { StaticQuery, graphql } from 'gatsby'
+import BlogPostListingItem from './BlogPostListingItem'
 
 const BLOG_POST_LISTING = graphql`
   query BLOG_POST_LISTING {
@@ -149,7 +150,7 @@ const BLOG_POST_LISTING = graphql`
       }
     }
   }
-`;
+`
 
 const BlogPostListing = () => (
   <StaticQuery
@@ -160,16 +161,16 @@ const BlogPostListing = () => (
       ))
     }
   />
-);
+)
 
-export default BlogPostListing;
+export default BlogPostListing
 ```
 
 Here's the code for `BlogPostListingItem.js`:
 
 ```js
-import React from 'react';
-import { Link } from 'gatsby';
+import React from 'react'
+import { Link } from 'gatsby'
 
 const BlogPostListingItem = ({ post }) => (
   <div>
@@ -197,23 +198,23 @@ const BlogPostListingItem = ({ post }) => (
     </article>
     <hr />
   </div>
-);
+)
 
-export default BlogPostListingItem;
+export default BlogPostListingItem
 ```
 
 Create the blog page in `src/pages/blog.js`
 
 ```js
-import React from 'react';
-import BlogPostListing from '../components/BlogPostListing';
+import React from 'react'
+import BlogPostListing from '../components/BlogPostListing'
 
 export default function blog() {
   return (
     <>
       <BlogPostListing />
     </>
-  );
+  )
 }
 ```
 
@@ -247,11 +248,11 @@ The page component file must export the query as `query`. By doing this, Gatsby 
 We can set the body of the post by creating an element with the attribute `dangerouslySetInnerHTML` and setting the queried html as the value to `__html`.
 
 ```js
-import React from 'react';
-import { graphql } from 'gatsby';
+import React from 'react'
+import { graphql } from 'gatsby'
 
 export default function BlogPost({ data }) {
-  const { markdownRemark } = data;
+  const { markdownRemark } = data
   return (
     <article>
       <header>
@@ -270,7 +271,7 @@ export default function BlogPost({ data }) {
       </aside>
       <hr />
     </article>
-  );
+  )
 }
 
 export const query = graphql`
@@ -286,7 +287,7 @@ export const query = graphql`
       html
     }
   }
-`;
+`
 ```
 
 But where do we create the routes for blogposts and how do we tell Gatsby to render them with this component?
@@ -312,10 +313,10 @@ Finally, call `resolve()` to resolve the promise.
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-const path = require('path');
+const path = require('path')
 
 exports.createPages = ({ graphql, actions }) => {
-  const { createPage } = actions;
+  const { createPage } = actions
 
   return new Promise((resolve, reject) => {
     graphql(`
@@ -339,24 +340,24 @@ exports.createPages = ({ graphql, actions }) => {
       }
     `).then(({ data, errors }) => {
       if (errors) {
-        return reject(errors);
+        return reject(errors)
       }
 
       data.blogposts.edges.forEach(({ node }) => {
-        const { slug } = node.frontmatter;
-        const relativePath = `/blog/${slug}`;
+        const { slug } = node.frontmatter
+        const relativePath = `/blog/${slug}`
         createPage({
           path: relativePath,
           component: path.resolve('./src/components/BlogPost.js'),
           context: {
-            id: node.id
-          }
-        });
-      });
-      resolve();
-    });
-  });
-};
+            id: node.id,
+          },
+        })
+      })
+      resolve()
+    })
+  })
+}
 ```
 
 Rerun `gatsby develop`. This time, it will build all the pages. Go to the blog page, click on a link. This should navigate you to `blog/` + the post `slug`, where you should be able to see the markdown rendered as HTML.

@@ -5,6 +5,7 @@ category: work
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/epubdebugger.png
 tags: JavaScript, CSS, EPUB, E-books, Gulp
 date: 2018-11-01
+archived: true
 ---
 
 When developing scripted EPUBs, you have access to a console in both the browser (when you mount the EPUB in the cloud reader) and when you mount the EPUB in proof mode in Apple Books. However, in both cases, what happens in the web- or desktop-based readers is not always a predictor of what will happen on an actual device. Device e-book reading applications don't have any kind of dev tools, so there's no way to know which function is returning undefined or throwing an error, or what the current values are in state.

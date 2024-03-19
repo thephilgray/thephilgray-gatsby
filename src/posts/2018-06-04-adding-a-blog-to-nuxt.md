@@ -5,6 +5,7 @@ tags: JavaScript, VueJS, Nuxt, Nuxtent, JAMStack, Markdown
 abstract: In this post, I survey markdown blogging options for Vue and React, and briefly describe the process of adding a blog to my Nuxt site using the currently unmaintained Nuxtent module.
 date: 2018-06-04
 draft: false
+archived: true
 ---
 
 ### VuePress and Other Markdown Options in Vue and React

@@ -5,6 +5,7 @@ category: work
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/customreadaloud.png
 tags: JavaScript, EPUB, E-books, Webpack
 date: 2018-09-26
+archived: true
 ---
 
 ### Overview
