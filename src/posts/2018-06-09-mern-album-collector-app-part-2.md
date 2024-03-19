@@ -5,6 +5,7 @@ tags: JavaScript, React, Node, Mongo, Express, Webpack, Redux, Testing, Jest, Cy
 abstract: This is the second part of a series of posts where I describe step-by-step how to build an app from scratch using Mongo, Express, React, and Node. Using the example of a simple CRUD app that allows users upload album artwork and rate albums, I'll touch on configuring Webpack, linting, end-to-end testing, Redux, serverless functions, and more.
 date: 2018-06-09
 draft: false
+archived: true
 ---
 
 The project source code can be found here: [https://github.com/thephilgray/review-react-2018/tree/master/005_mern](https://github.com/thephilgray/review-react-2018/tree/master/005_mern). A screenshot of the original Figma mockup along with the original Vue prototype can be found here: [https://github.com/thephilgray/designs-2018/tree/master/000_album-collector](https://github.com/thephilgray/designs-2018/tree/master/000_album-collector).
@@ -31,13 +32,13 @@ yarn add redux react-redux redux-thunk
 ```js
 // src/client/store/index.js
 
-import { createStore, compose, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import reducers from '../reducers';
+import { createStore, compose, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import reducers from '../reducers'
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
-export default store;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)))
+export default store
 ```
 
 - Touch `src/client/reducers/index.js`
@@ -45,16 +46,16 @@ export default store;
 ```js
 // src/client/reducers/index.js
 
-const initialState = {};
+const initialState = {}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default reducer;
+export default reducer
 ```
 
 - Import the store and provider into `src/client/index.js` and wrap the top-level component
@@ -62,21 +63,21 @@ export default reducer;
 ```js
 // src/client/index.js
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
 
-import App from './App';
-import store from './store/';
-import './index.css';
+import App from './App'
+import store from './store/'
+import './index.css'
 
 const app = (
   <Provider store={store}>
     <App />
   </Provider>
-);
+)
 
-ReactDOM.render(app, document.getElementById('root'));
+ReactDOM.render(app, document.getElementById('root'))
 ```
 
 ## Implement features
@@ -112,20 +113,20 @@ We already have a Cypress test that stubs a call to the API, gives us 7 items, a
 
 describe('App intitialization', () => {
   beforeEach(() => {
-    cy.server();
-    cy.route('GET', '/api/albums', 'fixture:albums');
-    cy.visit('/');
-  });
+    cy.server()
+    cy.route('GET', '/api/albums', 'fixture:albums')
+    cy.visit('/')
+  })
 
   it('Loads todos on page load', () => {
-    cy.get('[data-cy=Card]').should('have.length.above', 0);
-  });
+    cy.get('[data-cy=Card]').should('have.length.above', 0)
+  })
 
   it('Loads no more than `maxItemsPerPage` on page load', () => {
-    const maxItemsPerPage = 5;
-    cy.get('[data-cy=Card]').should('have.lengthOf', maxItemsPerPage);
-  });
-});
+    const maxItemsPerPage = 5
+    cy.get('[data-cy=Card]').should('have.lengthOf', maxItemsPerPage)
+  })
+})
 ```
 
 This first test fails.
@@ -139,14 +140,14 @@ yarn add lodash
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { chunk } from 'lodash';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { chunk } from 'lodash'
 
-import Card from './Card';
+import Card from './Card'
 
-const maxItemsPerPage = 5;
-const pages = albums => chunk(albums, maxItemsPerPage);
+const maxItemsPerPage = 5
+const pages = albums => chunk(albums, maxItemsPerPage)
 
 const CardGrid = props => (
   <div data-cy="CardGrid">
@@ -154,17 +155,17 @@ const CardGrid = props => (
       ? pages(props.albums)[0].map(album => <Card {...album} key={album._id} />)
       : null}
   </div>
-);
+)
 
 CardGrid.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.object)
-};
+  albums: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  albums: [{}]
-};
+  albums: [{}],
+}
 
-export default CardGrid;
+export default CardGrid
 ```
 
 Now we're only showing the first five pages. Instead of manually accessing the first page with [0], let's store the current page number in local state. We'll need to change this stateless functional component to a class component.
@@ -172,47 +173,47 @@ Now we're only showing the first five pages. Instead of manually accessing the f
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { chunk } from 'lodash';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { chunk } from 'lodash'
 
-import Card from './Card';
+import Card from './Card'
 
 class CardGrid extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       maxItemsPerPage: 5,
-      currentPageIndex: 0
-    };
-    this.pages = this.pages.bind(this);
+      currentPageIndex: 0,
+    }
+    this.pages = this.pages.bind(this)
   }
   pages(albums) {
-    return chunk(albums, this.state.maxItemsPerPage);
+    return chunk(albums, this.state.maxItemsPerPage)
   }
 
   render() {
     return (
       <div data-cy="CardGrid">
         {this.props.albums
-          ? this.pages(this.props.albums)[this.state.currentPageIndex].map(
-              album => <Card {...album} key={album._id} />
-            )
+          ? this.pages(this.props.albums)[
+              this.state.currentPageIndex
+            ].map(album => <Card {...album} key={album._id} />)
           : null}
       </div>
-    );
+    )
   }
 }
 
 CardGrid.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.object)
-};
+  albums: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  albums: [{}]
-};
+  albums: [{}],
+}
 
-export default CardGrid;
+export default CardGrid
 ```
 
 Let's make sure there's a next and previous button and that when it's clicked it causes the page to render the next page of items.
@@ -223,13 +224,13 @@ Let's make sure there's a next and previous button and that when it's clicked it
 // ...other tests
 
 it('Renders a next button', () => {
-  cy.get('button[data-cy=nextPage]');
-});
+  cy.get('button[data-cy=nextPage]')
+})
 
 it('should display the next page of results when the next page is button', () => {
-  cy.get('button[data-cy=nextPage]').click();
-  cy.get('[data-cy=Card]').should('have.lengthOf', 2);
-});
+  cy.get('button[data-cy=nextPage]').click()
+  cy.get('[data-cy=Card]').should('have.lengthOf', 2)
+})
 ```
 
 Now, let's create a higher-order component to wrap our CardGrid and handle pagination. We'll be able to expand on this and re-use it in our app.
@@ -237,49 +238,49 @@ Now, let's create a higher-order component to wrap our CardGrid and handle pagin
 ```js
 // src/client/components/withPages.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { chunk } from 'lodash';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { chunk } from 'lodash'
+import styled from 'styled-components'
 
-const PageButton = styled.button``;
+const PageButton = styled.button``
 
 const withPages = WrappedComponent => {
   class WithPages extends React.Component {
     constructor(props) {
-      super(props);
+      super(props)
       this.state = {
         maxItemsPerPage: props.maxItemsPerPage,
         pages: null,
         numberOfPages: 1,
-        currentPageIndex: 0
-      };
-      this.pages = this.pages.bind(this);
-      this.nextPage = this.nextPage.bind(this);
-      this.prevPage = this.prevPage.bind(this);
+        currentPageIndex: 0,
+      }
+      this.pages = this.pages.bind(this)
+      this.nextPage = this.nextPage.bind(this)
+      this.prevPage = this.prevPage.bind(this)
     }
 
     componentDidMount() {
-      const pages = this.pages(this.props.items);
-      const numberOfPages = pages.length;
-      this.setState({ pages, numberOfPages });
+      const pages = this.pages(this.props.items)
+      const numberOfPages = pages.length
+      this.setState({ pages, numberOfPages })
     }
 
     pages(items) {
-      return chunk(items, this.state.maxItemsPerPage);
+      return chunk(items, this.state.maxItemsPerPage)
     }
     nextPage() {
       this.setState(prevState => {
-        const nextPageIndex = prevState.currentPageIndex + 1;
-        return { currentPageIndex: nextPageIndex };
-      });
+        const nextPageIndex = prevState.currentPageIndex + 1
+        return { currentPageIndex: nextPageIndex }
+      })
     }
 
     prevPage() {
       this.setState(prevState => {
-        const prevPageIndex = prevState.currentPageIndex - 1;
-        return { currentPageIndex: prevPageIndex };
-      });
+        const prevPageIndex = prevState.currentPageIndex - 1
+        return { currentPageIndex: prevPageIndex }
+      })
     }
 
     render() {
@@ -308,32 +309,32 @@ const withPages = WrappedComponent => {
             </PageButton>
           ) : null}
         </div>
-      );
+      )
     }
   }
   WithPages.propTypes = {
     items: PropTypes.arrayOf(PropTypes.object),
-    maxItemsPerPage: PropTypes.number
-  };
+    maxItemsPerPage: PropTypes.number,
+  }
 
   WithPages.defaultProps = {
     items: [{}],
-    maxItemsPerPage: 10
-  };
-  return WithPages;
-};
+    maxItemsPerPage: 10,
+  }
+  return WithPages
+}
 
-export default withPages;
+export default withPages
 ```
 
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import Card from './Card';
-import withPages from './withPages';
+import Card from './Card'
+import withPages from './withPages'
 
 const CardGrid = props => (
   <div data-cy="CardGrid">
@@ -341,17 +342,17 @@ const CardGrid = props => (
       ? props.items.map(album => <Card {...album} key={album._id} />)
       : null}
   </div>
-);
+)
 
 CardGrid.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object)
-};
+  items: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  items: [{}]
-};
+  items: [{}],
+}
 
-export default withPages(CardGrid);
+export default withPages(CardGrid)
 ```
 
 Now, when we use the `CardGrid` album, we also want to pass down a value for the `maxItemsPerPage` prop, otherwise it will default to 10.
@@ -359,22 +360,22 @@ Now, when we use the `CardGrid` album, we also want to pass down a value for the
 ```js
 // src/client/App.js
 
-import React from 'react';
-import { loadAlbums } from './lib/service';
-import CardGrid from './components/CardGrid';
+import React from 'react'
+import { loadAlbums } from './lib/service'
+import CardGrid from './components/CardGrid'
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      albums: null
-    };
+      albums: null,
+    }
   }
 
   componentDidMount() {
     loadAlbums().then(({ data }) => {
-      this.setState({ albums: data });
-    });
+      this.setState({ albums: data })
+    })
   }
   render() {
     return (
@@ -383,7 +384,7 @@ export default class App extends React.Component {
           <CardGrid items={this.state.albums} maxItemsPerPage={5} />
         ) : null}
       </div>
-    );
+    )
   }
 }
 ```
@@ -400,17 +401,17 @@ When we touch one of these features, we want to be able to pass a different, mod
 // src/client/reducers/albumsReducer.js
 
 const initialState = {
-  albums: null
-};
+  albums: null,
+}
 
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default albumsReducer;
+export default albumsReducer
 ```
 
 - Modify `reducers/index.js` to return combined reducers
@@ -418,10 +419,10 @@ export default albumsReducer;
 ```js
 // src/client/reducers/index.js
 
-import { combineReducers } from 'redux';
-import albumsReducer from './albumsReducer';
+import { combineReducers } from 'redux'
+import albumsReducer from './albumsReducer'
 
-export default combineReducers({ albums: albumsReducer });
+export default combineReducers({ albums: albumsReducer })
 ```
 
 - Touch `src/client/lib/constants.js`
@@ -429,8 +430,8 @@ export default combineReducers({ albums: albumsReducer });
 ```js
 // src/client/lib/constants.js
 
-export const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS';
-export const FETCH_ALBUMS_FAILURE = 'FETCH_ALBUMS_FAILURE';
+export const FETCH_ALBUMS_SUCCESS = 'FETCH_ALBUMS_SUCCESS'
+export const FETCH_ALBUMS_FAILURE = 'FETCH_ALBUMS_FAILURE'
 ```
 
 - Touch `src/client/actions/index.js`
@@ -439,24 +440,24 @@ export const FETCH_ALBUMS_FAILURE = 'FETCH_ALBUMS_FAILURE';
 ```js
 // src/client/actions/index.js
 
-import { FETCH_ALBUMS_SUCCESS, FETCH_ALBUMS_FAILURE } from '../lib/constants';
-import { loadAlbums } from '../lib/service';
+import { FETCH_ALBUMS_SUCCESS, FETCH_ALBUMS_FAILURE } from '../lib/constants'
+import { loadAlbums } from '../lib/service'
 
 const fetchAlbumsFailure = error => ({
   type: FETCH_ALBUMS_FAILURE,
-  error
-});
+  error,
+})
 
 const fetchAlbumsSuccess = albums => ({
   type: FETCH_ALBUMS_SUCCESS,
-  albums
-});
+  albums,
+})
 
 export const fetchAlbums = () => dispatch => {
   loadAlbums()
     .then(({ data }) => dispatch(fetchAlbumsSuccess(data)))
-    .catch(error => dispatch(fetchAlbumsFailure(error)));
-};
+    .catch(error => dispatch(fetchAlbumsFailure(error)))
+}
 ```
 
 - Add cases to `albumsReducer`
@@ -464,27 +465,27 @@ export const fetchAlbums = () => dispatch => {
 ```js
 // src/client/reducers/albumsReducer.js
 
-import { FETCH_ALBUMS_FAILURE, FETCH_ALBUMS_SUCCESS } from '../lib/constants';
+import { FETCH_ALBUMS_FAILURE, FETCH_ALBUMS_SUCCESS } from '../lib/constants'
 
 const initialState = {
   albums: null,
-  error: null
-};
+  error: null,
+}
 
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ALBUMS_FAILURE: {
-      return { ...state, error: action.error };
+      return { ...state, error: action.error }
     }
     case FETCH_ALBUMS_SUCCESS: {
-      return { ...state, albums: action.albums };
+      return { ...state, albums: action.albums }
     }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default albumsReducer;
+export default albumsReducer
 ```
 
 - Now, let's bring in both the state and the async function to our root component to use instead of local state
@@ -492,15 +493,15 @@ export default albumsReducer;
 ```js
 // src/client/App.js
 
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { fetchAlbums } from './actions';
-import CardGrid from './components/CardGrid';
+import { fetchAlbums } from './actions'
+import CardGrid from './components/CardGrid'
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.loadAlbums();
+    this.props.loadAlbums()
   }
   render() {
     return (
@@ -509,21 +510,18 @@ class App extends React.Component {
           <CardGrid items={this.props.albums} maxItemsPerPage={5} />
         ) : null}
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => ({
-  albums: state.albums.albums
-});
+  albums: state.albums.albums,
+})
 const mapDispatchToProps = dispatch => ({
-  loadAlbums: () => dispatch(fetchAlbums())
-});
+  loadAlbums: () => dispatch(fetchAlbums()),
+})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 ```
 
 - The albums are now safely stored in the `Redux` store. If we want to swap out the data that we pass to `CardGrid` and then quickly revert to the original data without fetching it from the server again, no problem.
@@ -532,10 +530,10 @@ export default connect(
 // src/client/lib/constants.js
 
 //... other consts
-export const SORT_BY_TITLE_ASC = 'SORT_BY_TITLE_ASC';
-export const SORT_BY_TITLE_DESC = 'SORT_BY_TITLE_DESC';
-export const SORT_BY_RATING_ASC = 'SORT_BY_RATING_ASC';
-export const SORT_BY_RATING_DESC = 'SORT_BY_RATING_DESC';
+export const SORT_BY_TITLE_ASC = 'SORT_BY_TITLE_ASC'
+export const SORT_BY_TITLE_DESC = 'SORT_BY_TITLE_DESC'
+export const SORT_BY_RATING_ASC = 'SORT_BY_RATING_ASC'
+export const SORT_BY_RATING_DESC = 'SORT_BY_RATING_DESC'
 ```
 
 - Create the actions
@@ -547,15 +545,15 @@ import {
   SORT_BY_RATING_ASC,
   SORT_BY_RATING_DESC,
   SORT_BY_TITLE_ASC,
-  SORT_BY_TITLE_DESC
-} from '../lib/constants';
+  SORT_BY_TITLE_DESC,
+} from '../lib/constants'
 
 // ...other imports, other actions
 
-export const sortByTitleAsc = () => ({ type: SORT_BY_TITLE_ASC });
-export const sortByTitleDesc = () => ({ type: SORT_BY_TITLE_DESC });
-export const sortByRatingAsc = () => ({ type: SORT_BY_RATING_ASC });
-export const sortByRatingDesc = () => ({ type: SORT_BY_RATING_DESC });
+export const sortByTitleAsc = () => ({ type: SORT_BY_TITLE_ASC })
+export const sortByTitleDesc = () => ({ type: SORT_BY_TITLE_DESC })
+export const sortByRatingAsc = () => ({ type: SORT_BY_RATING_ASC })
+export const sortByRatingDesc = () => ({ type: SORT_BY_RATING_DESC })
 ```
 
 - Touch `src/client/__tests__/reducers/albumsReducer.test.js`
@@ -563,59 +561,59 @@ export const sortByRatingDesc = () => ({ type: SORT_BY_RATING_DESC });
 ```js
 // src/client/__tests__/reducers/albumsReducer.test.js
 
-import albumsReducer from '../../reducers/albumsReducer';
-import * as constants from '../../lib/constants';
-import sampleData from '../../../server/sampledata.json';
+import albumsReducer from '../../reducers/albumsReducer'
+import * as constants from '../../lib/constants'
+import sampleData from '../../../server/sampledata.json'
 
 describe('albumsReducer', () => {
-  let loadedState;
+  let loadedState
   beforeEach(() => {
     loadedState = albumsReducer(undefined, {
       type: constants.FETCH_ALBUMS_SUCCESS,
-      albums: sampleData
-    });
-  });
+      albums: sampleData,
+    })
+  })
   it('loads the albums from the server', () => {
-    expect(loadedState.albums.length).toBe(sampleData.length);
-  });
+    expect(loadedState.albums.length).toBe(sampleData.length)
+  })
   it('should sort the albums by title in ascending order', () => {
-    const sortedByTitleAsc = sampleData.sort((a, b) => a.title - b.title);
+    const sortedByTitleAsc = sampleData.sort((a, b) => a.title - b.title)
     const sortedState = albumsReducer(loadedState, {
-      type: constants.SORT_BY_TITLE_ASC
-    });
-    expect(sortedState.albums).toMatchObject(sortedByTitleAsc);
-  });
+      type: constants.SORT_BY_TITLE_ASC,
+    })
+    expect(sortedState.albums).toMatchObject(sortedByTitleAsc)
+  })
 
   it('should sort the albums by title in descending order', () => {
     const sortedByTitleDesc = sampleData.sort((a, b) => {
-      if (a.title > b.title) return -1;
-      else if (a.title < b.title) return 1;
-      return 0;
-    });
+      if (a.title > b.title) return -1
+      else if (a.title < b.title) return 1
+      return 0
+    })
     const sortedState = albumsReducer(loadedState, {
-      type: constants.SORT_BY_TITLE_DESC
-    });
-    expect(sortedState.albums).toMatchObject(sortedByTitleDesc);
-  });
+      type: constants.SORT_BY_TITLE_DESC,
+    })
+    expect(sortedState.albums).toMatchObject(sortedByTitleDesc)
+  })
 
   it('should sort the albums by rating in ascending order', () => {
     const sortedState = albumsReducer(loadedState, {
-      type: constants.SORT_BY_RATING_ASC
-    });
-    const firstItem = sortedState.albums[0].rating;
-    const lastItem = sortedState.albums[sortedState.albums.length - 1].rating;
-    expect(lastItem).toBeGreaterThanOrEqual(firstItem);
-  });
+      type: constants.SORT_BY_RATING_ASC,
+    })
+    const firstItem = sortedState.albums[0].rating
+    const lastItem = sortedState.albums[sortedState.albums.length - 1].rating
+    expect(lastItem).toBeGreaterThanOrEqual(firstItem)
+  })
 
   it('should sort the albums by rating in descending order', () => {
     const sortedState = albumsReducer(loadedState, {
-      type: constants.SORT_BY_RATING_DESC
-    });
-    const firstItem = sortedState.albums[0].rating;
-    const lastItem = sortedState.albums[sortedState.albums.length - 1].rating;
-    expect(firstItem).toBeGreaterThanOrEqual(lastItem);
-  });
-});
+      type: constants.SORT_BY_RATING_DESC,
+    })
+    const firstItem = sortedState.albums[0].rating
+    const lastItem = sortedState.albums[sortedState.albums.length - 1].rating
+    expect(firstItem).toBeGreaterThanOrEqual(lastItem)
+  })
+})
 ```
 
 - Update the reducer
@@ -629,76 +627,76 @@ import {
   SORT_BY_RATING_ASC,
   SORT_BY_RATING_DESC,
   SORT_BY_TITLE_ASC,
-  SORT_BY_TITLE_DESC
-} from '../lib/constants';
+  SORT_BY_TITLE_DESC,
+} from '../lib/constants'
 
 const initialState = {
   albums: null,
   error: null,
-  sortOrder: ''
-};
+  sortOrder: '',
+}
 
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ALBUMS_FAILURE: {
-      return { ...state, error: action.error };
+      return { ...state, error: action.error }
     }
     case FETCH_ALBUMS_SUCCESS: {
       return {
         ...state,
         albums: action.albums.sort((a, b) => {
-          if (a.title > b.title) return 1;
-          else if (a.title < b.title) return -1;
-          return 0;
+          if (a.title > b.title) return 1
+          else if (a.title < b.title) return -1
+          return 0
         }),
-        sortOrder: SORT_BY_TITLE_ASC
-      };
+        sortOrder: SORT_BY_TITLE_ASC,
+      }
     }
     case SORT_BY_TITLE_ASC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => {
-          if (a.title > b.title) return 1;
-          else if (a.title < b.title) return -1;
-          return 0;
+          if (a.title > b.title) return 1
+          else if (a.title < b.title) return -1
+          return 0
         }),
-        sortOrder: SORT_BY_TITLE_ASC
-      };
+        sortOrder: SORT_BY_TITLE_ASC,
+      }
     }
 
     case SORT_BY_TITLE_DESC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => {
-          if (a.title > b.title) return -1;
-          else if (a.title < b.title) return 1;
-          return 0;
+          if (a.title > b.title) return -1
+          else if (a.title < b.title) return 1
+          return 0
         }),
-        sortOrder: SORT_BY_TITLE_DESC
-      };
+        sortOrder: SORT_BY_TITLE_DESC,
+      }
     }
 
     case SORT_BY_RATING_ASC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => a.rating - b.rating),
-        sortOrder: SORT_BY_RATING_ASC
-      };
+        sortOrder: SORT_BY_RATING_ASC,
+      }
     }
     case SORT_BY_RATING_DESC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => b.rating - a.rating),
-        sortOrder: SORT_BY_RATING_DESC
-      };
+        sortOrder: SORT_BY_RATING_DESC,
+      }
     }
 
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default albumsReducer;
+export default albumsReducer
 ```
 
 #### Refactor and Connect
@@ -710,57 +708,57 @@ TODO: Discuss the new `static getDerivedStateFromProps` method
 ```js
 // src/client/hocs/withPages.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { chunk } from 'lodash';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { chunk } from 'lodash'
+import styled from 'styled-components'
 
-const PageButton = styled.button``;
+const PageButton = styled.button``
 
 const withPages = WrappedComponent => {
   class WithPages extends React.Component {
     static getDerivedStateFromProps(nextProps, prevState) {
       if (nextProps.items !== prevState.items) {
-        const paginate = items => chunk(items, prevState.maxItemsPerPage);
-        const pages = paginate(nextProps.items);
-        const numberOfPages = pages.length;
+        const paginate = items => chunk(items, prevState.maxItemsPerPage)
+        const pages = paginate(nextProps.items)
+        const numberOfPages = pages.length
         return {
           ...prevState,
           pages,
           numberOfPages,
-          currentPageIndex: 0
-        };
+          currentPageIndex: 0,
+        }
       }
-      return null;
+      return null
     }
     constructor(props) {
-      super(props);
+      super(props)
       this.state = {
         maxItemsPerPage: props.maxItemsPerPage,
         pages: null,
         numberOfPages: 1,
-        currentPageIndex: 0
-      };
-      this.pages = this.pages.bind(this);
-      this.nextPage = this.nextPage.bind(this);
-      this.prevPage = this.prevPage.bind(this);
+        currentPageIndex: 0,
+      }
+      this.pages = this.pages.bind(this)
+      this.nextPage = this.nextPage.bind(this)
+      this.prevPage = this.prevPage.bind(this)
     }
 
     pages(items) {
-      return chunk(items, this.state.maxItemsPerPage);
+      return chunk(items, this.state.maxItemsPerPage)
     }
     nextPage() {
       this.setState(prevState => {
-        const nextPageIndex = prevState.currentPageIndex + 1;
-        return { currentPageIndex: nextPageIndex };
-      });
+        const nextPageIndex = prevState.currentPageIndex + 1
+        return { currentPageIndex: nextPageIndex }
+      })
     }
 
     prevPage() {
       this.setState(prevState => {
-        const prevPageIndex = prevState.currentPageIndex - 1;
-        return { currentPageIndex: prevPageIndex };
-      });
+        const prevPageIndex = prevState.currentPageIndex - 1
+        return { currentPageIndex: prevPageIndex }
+      })
     }
 
     render() {
@@ -789,22 +787,22 @@ const withPages = WrappedComponent => {
             </PageButton>
           ) : null}
         </div>
-      );
+      )
     }
   }
   WithPages.propTypes = {
     items: PropTypes.arrayOf(PropTypes.object),
-    maxItemsPerPage: PropTypes.number
-  };
+    maxItemsPerPage: PropTypes.number,
+  }
 
   WithPages.defaultProps = {
     items: [{}],
-    maxItemsPerPage: 10
-  };
-  return WithPages;
-};
+    maxItemsPerPage: 10,
+  }
+  return WithPages
+}
 
-export default withPages;
+export default withPages
 ```
 
 - Create a special container for the CardGrid component called `src/client/containers/AlbumGrid.js`
@@ -812,10 +810,10 @@ export default withPages;
 ```js
 // src/client/containers/AlbumGrid.js
 
-import React from 'react';
+import React from 'react'
 
-import withAlbums from '../hocs/withAlbums';
-import CardGrid from '../components/CardGrid';
+import withAlbums from '../hocs/withAlbums'
+import CardGrid from '../components/CardGrid'
 
 export const AlbumGrid = props => (
   <div>
@@ -831,9 +829,9 @@ export const AlbumGrid = props => (
       <CardGrid items={props.albums} maxItemsPerPage={5} />
     ) : null}
   </div>
-);
+)
 
-export default withAlbums(AlbumGrid);
+export default withAlbums(AlbumGrid)
 ```
 
 - Create a higher order component that connects this container with the redux store
@@ -841,49 +839,46 @@ export default withAlbums(AlbumGrid);
 ```js
 // src/client/hocs/withAlbums.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import {
   fetchAlbums,
   sortByRatingAsc,
   sortByRatingDesc,
   sortByTitleAsc,
-  sortByTitleDesc
-} from '../actions';
+  sortByTitleDesc,
+} from '../actions'
 
 const withAlbums = WrappedComponent => {
   class WithAlbums extends React.Component {
     componentDidMount() {
-      this.props.loadAlbums();
+      this.props.loadAlbums()
     }
 
     render() {
-      return <WrappedComponent {...this.props} />;
+      return <WrappedComponent {...this.props} />
     }
   }
   WithAlbums.propTypes = {
-    loadAlbums: PropTypes.func.isRequired
-  };
+    loadAlbums: PropTypes.func.isRequired,
+  }
   const mapStateToProps = state => ({
     albums: state.albums.albums,
-    sortOrder: state.albums.sortOrder
-  });
+    sortOrder: state.albums.sortOrder,
+  })
   const mapDispatchToProps = dispatch => ({
     loadAlbums: () => dispatch(fetchAlbums()),
     onSortByRatingAsc: () => dispatch(sortByRatingAsc()),
     onSortByRatingDesc: () => dispatch(sortByRatingDesc()),
     onSortByTitleAsc: () => dispatch(sortByTitleAsc()),
-    onSortByTitleDesc: () => dispatch(sortByTitleDesc())
-  });
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(WithAlbums);
-};
+    onSortByTitleDesc: () => dispatch(sortByTitleDesc()),
+  })
+  return connect(mapStateToProps, mapDispatchToProps)(WithAlbums)
+}
 
-export default withAlbums;
+export default withAlbums
 ```
 
 - The `CardGrid` component can now be significantly paired down. Here's the updated test followed by the component:
@@ -891,48 +886,48 @@ export default withAlbums;
 ```js
 // src/client/__tests__/components/Card.test.js
 
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from 'react'
+import { shallow } from 'enzyme'
 
-import Card from '../../components/Card';
-import sampleData from '../../../server/sampledata.json';
+import Card from '../../components/Card'
+import sampleData from '../../../server/sampledata.json'
 
 describe('Card', () => {
   it('renders', () => {
-    const wrapper = shallow(<Card />);
-    expect(wrapper).toMatchSnapshot();
-  });
+    const wrapper = shallow(<Card />)
+    expect(wrapper).toMatchSnapshot()
+  })
 
   it('should render a card title by default', () => {
-    const wrapper = shallow(<Card />);
-    expect(wrapper.find('h3').text()).toBeTruthy();
-  });
+    const wrapper = shallow(<Card />)
+    expect(wrapper.find('h3').text()).toBeTruthy()
+  })
 
   it('should render the title of the provided item', () => {
-    const sampleItem = sampleData[0];
-    const wrapper = shallow(<Card {...sampleItem} />);
+    const sampleItem = sampleData[0]
+    const wrapper = shallow(<Card {...sampleItem} />)
     expect(wrapper.find('[data-cy="card__title"]').text()).toContain(
       sampleItem.title
-    );
-  });
-});
+    )
+  })
+})
 ```
 
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import Card from './Card';
-import withPages from '../hocs/withPages';
+import Card from './Card'
+import withPages from '../hocs/withPages'
 
 const CardGridWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-`;
+`
 
 export const CardGrid = props => (
   <CardGridWrapper data-cy="CardGrid">
@@ -940,17 +935,17 @@ export const CardGrid = props => (
       <Card {...album} key={album._id} />
     ))}
   </CardGridWrapper>
-);
+)
 
 CardGrid.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object)
-};
+  items: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  items: [{}]
-};
+  items: [{}],
+}
 
-export default withPages(CardGrid);
+export default withPages(CardGrid)
 ```
 
 The `App` component can be converted to a stateless functional component for the time being:
@@ -958,13 +953,13 @@ The `App` component can be converted to a stateless functional component for the
 ```js
 // src/client/App.js
 
-import React from 'react';
+import React from 'react'
 
-import AlbumGrid from './containers/AlbumGrid';
+import AlbumGrid from './containers/AlbumGrid'
 
-const App = () => <AlbumGrid />;
+const App = () => <AlbumGrid />
 
-export default App;
+export default App
 ```
 
 The project structure should now look like this:
@@ -1043,35 +1038,35 @@ Again, there are better ways to approach search in terms of scalability, but for
 ```js
 // src/client/__tests__/reducers/albumsReducer.test.js
 
-import albumsReducer from '../../reducers/albumsReducer';
-import * as constants from '../../lib/constants';
-import sampleData from '../../../server/sampledata.json';
+import albumsReducer from '../../reducers/albumsReducer'
+import * as constants from '../../lib/constants'
+import sampleData from '../../../server/sampledata.json'
 
 describe('albumsReducer', () => {
-  let loadedState;
+  let loadedState
   beforeEach(() => {
     loadedState = albumsReducer(undefined, {
       type: constants.FETCH_ALBUMS_SUCCESS,
-      albums: sampleData
-    });
-  });
+      albums: sampleData,
+    })
+  })
 
   // ...other tests
 
   it('should filter artists by artist and title', () => {
-    const query = 'space';
+    const query = 'space'
     const filteredState = albumsReducer(loadedState, {
       type: constants.FILTER_BY_SEARCH_QUERY,
-      query
-    });
+      query,
+    })
     const expected = sampleData.filter(album => {
-      const re = new RegExp(query, 'gi');
-      return album.title.match(re) || album.artist.match(re);
-    });
+      const re = new RegExp(query, 'gi')
+      return album.title.match(re) || album.artist.match(re)
+    })
 
-    expect(filteredState.filteredAlbums).toMatchObject(expected);
-  });
-});
+    expect(filteredState.filteredAlbums).toMatchObject(expected)
+  })
+})
 ```
 
 - Add `FILTER_BY_SEARCH_QUERY` to `src/client/lib/constants.js`
@@ -1082,16 +1077,16 @@ describe('albumsReducer', () => {
 
 import {
   // ...other constants
-  FILTER_BY_SEARCH_QUERY
-} from '../lib/constants';
-import { loadAlbums } from '../lib/service';
+  FILTER_BY_SEARCH_QUERY,
+} from '../lib/constants'
+import { loadAlbums } from '../lib/service'
 
 // ...other actions
 
 export const filterBySearchQuery = query => ({
   type: FILTER_BY_SEARCH_QUERY,
-  query
-});
+  query,
+})
 ```
 
 - Create the reducer case for `FILTER_BY_SEARCH_QUERY`
@@ -1108,68 +1103,68 @@ import {
   SORT_BY_RATING_DESC,
   SORT_BY_TITLE_ASC,
   SORT_BY_TITLE_DESC,
-  FILTER_BY_SEARCH_QUERY
-} from '../lib/constants';
+  FILTER_BY_SEARCH_QUERY,
+} from '../lib/constants'
 
 const initialState = {
   albums: null,
   filteredAlbums: null,
   error: null,
   sortOrder: '',
-  searchActive: false
-};
+  searchActive: false,
+}
 
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_ALBUMS_FAILURE: {
-      return { ...state, error: action.error };
+      return { ...state, error: action.error }
     }
 
     case FETCH_ALBUMS_SUCCESS: {
       return {
         ...state,
         albums: action.albums.sort((a, b) => {
-          if (a.title > b.title) return 1;
-          else if (a.title < b.title) return -1;
-          return 0;
+          if (a.title > b.title) return 1
+          else if (a.title < b.title) return -1
+          return 0
         }),
         sortOrder: SORT_BY_TITLE_ASC,
-        searchActive: false
-      };
+        searchActive: false,
+      }
     }
 
     case FILTER_BY_SEARCH_QUERY: {
       const filteredAlbums = state.albums.slice().filter(album => {
-        const re = new RegExp(action.query, 'gi');
-        return album.title.match(re) || album.artist.match(re);
-      });
-      return { ...state, searchActive: true, filteredAlbums };
+        const re = new RegExp(action.query, 'gi')
+        return album.title.match(re) || album.artist.match(re)
+      })
+      return { ...state, searchActive: true, filteredAlbums }
     }
 
     case SORT_BY_TITLE_ASC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => {
-          if (a.title > b.title) return 1;
-          else if (a.title < b.title) return -1;
-          return 0;
+          if (a.title > b.title) return 1
+          else if (a.title < b.title) return -1
+          return 0
         }),
         sortOrder: SORT_BY_TITLE_ASC,
-        searchActive: false
-      };
+        searchActive: false,
+      }
     }
 
     case SORT_BY_TITLE_DESC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => {
-          if (a.title > b.title) return -1;
-          else if (a.title < b.title) return 1;
-          return 0;
+          if (a.title > b.title) return -1
+          else if (a.title < b.title) return 1
+          return 0
         }),
         sortOrder: SORT_BY_TITLE_DESC,
-        searchActive: false
-      };
+        searchActive: false,
+      }
     }
 
     case SORT_BY_RATING_ASC: {
@@ -1177,24 +1172,24 @@ const albumsReducer = (state = initialState, action) => {
         ...state,
         albums: state.albums.slice().sort((a, b) => a.rating - b.rating),
         sortOrder: SORT_BY_RATING_ASC,
-        searchActive: false
-      };
+        searchActive: false,
+      }
     }
     case SORT_BY_RATING_DESC: {
       return {
         ...state,
         albums: state.albums.slice().sort((a, b) => b.rating - a.rating),
         sortOrder: SORT_BY_RATING_DESC,
-        searchActive: false
-      };
+        searchActive: false,
+      }
     }
 
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default albumsReducer;
+export default albumsReducer
 ```
 
 The test should now be passing.
@@ -1259,19 +1254,19 @@ export default withAlbums;
 
 describe('App intitialization', () => {
   beforeEach(() => {
-    cy.server();
-    cy.route('GET', '/api/albums', 'fixture:albums');
-    cy.visit('/');
-  });
+    cy.server()
+    cy.route('GET', '/api/albums', 'fixture:albums')
+    cy.visit('/')
+  })
 
   // ...other tests
 
   it('should display only the search results when the user enters text into the search field', () => {
-    const query = 'space';
-    cy.get('input[data-cy=searchAlbums]').type(query);
-    cy.get('[data-cy=Card]').should('have.lengthOf', 1);
-  });
-});
+    const query = 'space'
+    cy.get('input[data-cy=searchAlbums]').type(query)
+    cy.get('[data-cy=Card]').should('have.lengthOf', 1)
+  })
+})
 ```
 
 - Create a text input for users to enter their queries and switch out the data with `filteredAlbums` if `searchActive
@@ -1279,31 +1274,31 @@ describe('App intitialization', () => {
 ```js
 // src/client/containers/AlbumGrid.js
 
-import React from 'react';
+import React from 'react'
 
-import withAlbums from '../hocs/withAlbums';
-import CardGrid from '../components/CardGrid';
+import withAlbums from '../hocs/withAlbums'
+import CardGrid from '../components/CardGrid'
 
 export const AlbumGrid = class extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      query: ''
-    };
-    this.search = this.search.bind(this);
+      query: '',
+    }
+    this.search = this.search.bind(this)
   }
 
   search(event) {
-    this.setState({ query: event.target.value });
-    this.props.onFilterBySearchQuery(this.state.query);
+    this.setState({ query: event.target.value })
+    this.props.onFilterBySearchQuery(this.state.query)
   }
   render() {
-    const { props } = this;
-    let items;
+    const { props } = this
+    let items
     if (props.searchActive && this.state.query) {
-      items = props.filteredAlbums;
+      items = props.filteredAlbums
     } else {
-      items = props.albums;
+      items = props.albums
     }
     return (
       <div>
@@ -1329,11 +1324,11 @@ export const AlbumGrid = class extends React.Component {
 
         {props.albums ? <CardGrid items={items} maxItemsPerPage={5} /> : null}
       </div>
-    );
+    )
   }
-};
+}
 
-export default withAlbums(AlbumGrid);
+export default withAlbums(AlbumGrid)
 ```
 
 There is at least one bug. Right now, if nothing matches the query, we're seeing fake album created by `defaultProps` in the `CardGrid` and `Card` components. Another bug is that the search seems to be lagging a key or two behind. This is because `setState` is asynchronous, which means we're dispatching the `filterBySearchQuery` with a state value before that state value has been updated.
@@ -1352,29 +1347,29 @@ describe('CardGrid', () => {
   // ...other tests
 
   it('displays a message to the user if `items` is empty', () => {
-    const emptyMessage = 'No items.';
-    const wrapper = shallow(<CardGrid items={[]} />);
-    expect(wrapper.find('p').text()).toContain(emptyMessage);
-  });
-});
+    const emptyMessage = 'No items.'
+    const wrapper = shallow(<CardGrid items={[]} />)
+    expect(wrapper.find('p').text()).toContain(emptyMessage)
+  })
+})
 ```
 
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { isEmpty } from 'lodash';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { isEmpty } from 'lodash'
 
-import Card from './Card';
-import withPages from '../hocs/withPages';
+import Card from './Card'
+import withPages from '../hocs/withPages'
 
 const CardGridWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-`;
+`
 
 export const CardGrid = props => (
   <CardGridWrapper data-cy="CardGrid">
@@ -1384,17 +1379,17 @@ export const CardGrid = props => (
       <p>No items.</p>
     )}
   </CardGridWrapper>
-);
+)
 
 CardGrid.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.object)
-};
+  items: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  items: []
-};
+  items: [],
+}
 
-export default withPages(CardGrid);
+export default withPages(CardGrid)
 ```
 
 Luckily, `setState` also takes a callback. So, we can move the call to dispatch there.
@@ -1421,33 +1416,33 @@ The updated `AlbumGrid` component will look like this
 ```js
 // src/client/containers/AlbumGrid.js
 
-import React from 'react';
+import React from 'react'
 
-import withAlbums from '../hocs/withAlbums';
-import CardGrid from '../components/CardGrid';
-import SearchSortControls from '../containers/SearchSortControls';
+import withAlbums from '../hocs/withAlbums'
+import CardGrid from '../components/CardGrid'
+import SearchSortControls from '../containers/SearchSortControls'
 
 export const AlbumGrid = class extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      query: ''
-    };
-    this.search = this.search.bind(this);
+      query: '',
+    }
+    this.search = this.search.bind(this)
   }
 
   search(event) {
     this.setState({ query: event.target.value }, () =>
       this.props.onFilterBySearchQuery(this.state.query)
-    );
+    )
   }
   render() {
-    const { props } = this;
-    let items;
+    const { props } = this
+    let items
     if (props.searchActive && this.state.query) {
-      items = props.filteredAlbums;
+      items = props.filteredAlbums
     } else {
-      items = props.albums;
+      items = props.albums
     }
     return (
       <div>
@@ -1463,11 +1458,11 @@ export const AlbumGrid = class extends React.Component {
         />
         {props.albums ? <CardGrid items={items} maxItemsPerPage={5} /> : null}
       </div>
-    );
+    )
   }
-};
+}
 
-export default withAlbums(AlbumGrid);
+export default withAlbums(AlbumGrid)
 ```
 
 - Create styled-components for the buttons and search field in `src/client/containers/SearchSortControls.js`
@@ -1475,8 +1470,8 @@ export default withAlbums(AlbumGrid);
 ```js
 // src/client/containers/SearchSortControls.js
 
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 const SearchSortControlsWrapper = styled.div`
   display: flex;
@@ -1488,13 +1483,13 @@ const SearchSortControlsWrapper = styled.div`
   background: #c4c4c4;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   height: 3em;
-`;
+`
 
 const Button = styled.button`
   cursor: pointer;
   background: transparent;
   border: transparent;
-`;
+`
 
 const SearchInput = styled.input`
   font-size: 1.5em;
@@ -1504,27 +1499,27 @@ const SearchInput = styled.input`
   margin: 0;
   border: none;
   transition: all 0.5s ease-in-out;
-`;
+`
 
 const SearchSortControls = class extends React.Component {
   constructor(props) {
-    super(props);
-    this.searchInput = null;
-    this.searchButton = null;
-    this.searchButtonHandler = this.searchButtonHandler.bind(this);
+    super(props)
+    this.searchInput = null
+    this.searchButton = null
+    this.searchButtonHandler = this.searchButtonHandler.bind(this)
   }
 
   searchButtonHandler() {
-    this.props.onToggleSearchActive();
+    this.props.onToggleSearchActive()
     if (this.props.searchActive) {
-      this.searchButton.focus();
+      this.searchButton.focus()
     } else {
-      this.searchInput.focus();
+      this.searchInput.focus()
     }
   }
 
   render() {
-    const { props } = this;
+    const { props } = this
 
     return (
       <SearchSortControlsWrapper>
@@ -1535,14 +1530,14 @@ const SearchSortControls = class extends React.Component {
           value={props.query}
           active={props.searchActive}
           innerRef={el => {
-            this.searchInput = el;
+            this.searchInput = el
           }}
         />
         <Button
           data-cy="searchButton"
           onClick={this.searchButtonHandler}
           innerRef={el => {
-            this.searchButton = el;
+            this.searchButton = el
           }}
         >
           Search
@@ -1554,11 +1549,11 @@ const SearchSortControls = class extends React.Component {
         <Button onClick={props.onSortByTitleAsc}>Sort By Title (asc)</Button>
         <Button onClick={props.onSortByTitleDesc}>Sort By Title (desc)</Button>
       </SearchSortControlsWrapper>
-    );
+    )
   }
-};
+}
 
-export default SearchSortControls;
+export default SearchSortControls
 ```
 
 - For this change, we had to go up the chain, adding the `onToggleSearchActive` prop, a new `toggleSearchActive` action, and `TOGGLE_SEARCH_ACTIVE` reducer
@@ -1566,56 +1561,56 @@ export default SearchSortControls;
 ```js
 // src/client/containers/AlbumGrid.js
 
-<SearchSortControls
+;<SearchSortControls
   // ....other props
   onToggleSearchActive={props.onToggleSearchActive}
-/>;
+/>
 
 // src/client/hocs/withAlbums.js
 
-import { toggleSearchActive /** ...other actions **/ } from '../actions';
+import { toggleSearchActive /** ...other actions **/ } from '../actions'
 
 const mapStateToProps = state => ({
   // ...other mapped state
-  searchActive: state.albums.searchActive
-});
+  searchActive: state.albums.searchActive,
+})
 
 const mapDispatchToActions = dispatch => ({
   // ...other mapped actions
-  onToggleSearchActive: () => dispatch(toggleSearchActive())
-});
+  onToggleSearchActive: () => dispatch(toggleSearchActive()),
+})
 
 // src/client/lib/constants.js
 
 // ...other constants
-export const TOGGLE_SEARCH_ACTIVE = 'TOGGLE_SEARCH_ACTIVE';
+export const TOGGLE_SEARCH_ACTIVE = 'TOGGLE_SEARCH_ACTIVE'
 
 // src/client/actions/index.js
 
 import {
   // ... other imports
-  TOGGLE_SEARCH_ACTIVE
-} from '../lib/constants';
-import { loadAlbums } from '../lib/service';
+  TOGGLE_SEARCH_ACTIVE,
+} from '../lib/constants'
+import { loadAlbums } from '../lib/service'
 
 // ...other actions
 
-export const toggleSearchActive = () => ({ type: TOGGLE_SEARCH_ACTIVE });
+export const toggleSearchActive = () => ({ type: TOGGLE_SEARCH_ACTIVE })
 
 // src/client/reducers/albumsReducer.js
 
 import {
   // ...other constants
-  TOGGLE_SEARCH_ACTIVE
-} from '../lib/constants';
+  TOGGLE_SEARCH_ACTIVE,
+} from '../lib/constants'
 
 const initialState = {
   albums: null,
   filteredAlbums: null,
   error: null,
   sortOrder: '',
-  searchActive: false
-};
+  searchActive: false,
+}
 
 const albumsReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -1623,17 +1618,17 @@ const albumsReducer = (state = initialState, action) => {
 
     case TOGGLE_SEARCH_ACTIVE: {
       if (state.searchActive) {
-        return { ...state, searchActive: false, filteredAlbums: null };
+        return { ...state, searchActive: false, filteredAlbums: null }
       }
-      return { ...state, searchActive: true };
+      return { ...state, searchActive: true }
     }
 
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default albumsReducer;
+export default albumsReducer
 ```
 
 This slight change in functionality, requiring the user to click the search button before they can enter text means that we need to update one `Cypress` test which is now failing.
@@ -1646,11 +1641,11 @@ This slight change in functionality, requiring the user to click the search butt
 // ...other tests
 
 it('should display only the search results when the user enters text into the search field', () => {
-  const query = 'space';
-  cy.get('button[data-cy="searchButton"]').click();
-  cy.get('input[data-cy=searchAlbums]').type(query);
-  cy.get('[data-cy=Card]').should('have.lengthOf', 1);
-});
+  const query = 'space'
+  cy.get('button[data-cy="searchButton"]').click()
+  cy.get('input[data-cy=searchAlbums]').type(query)
+  cy.get('[data-cy=Card]').should('have.lengthOf', 1)
+})
 ```
 
 Another bug to consider is if the user enters special characters or attempt a XSS attack. We should always sanitize user input. Not to mention that currently, if you type `(` into the text input, it causes the regular expression used in the `FILTER_BY_SEARCH_QUERY` reducer case to throw an error and nothing renders on the page.
@@ -1660,35 +1655,35 @@ Basically, we just want to make sure that the following characters get escaped: 
 ```js
 // src/client/__tests__/reducers/albumsReducer.test.js
 
-import { escapeRegExp } from 'lodash';
+import { escapeRegExp } from 'lodash'
 // ...other imports
 
 describe('albumsReducer', () => {
-  let loadedState;
+  let loadedState
   beforeEach(() => {
     loadedState = albumsReducer(undefined, {
       type: constants.FETCH_ALBUMS_SUCCESS,
-      albums: sampleData
-    });
-  });
+      albums: sampleData,
+    })
+  })
 
   // ...other tests
 
   it('should escape user input that includes special characters', () => {
-    const query = '(space';
+    const query = '(space'
     const filteredState = albumsReducer(loadedState, {
       type: constants.FILTER_BY_SEARCH_QUERY,
-      query
-    });
+      query,
+    })
 
-    const escapedQuery = escapeRegExp(query);
+    const escapedQuery = escapeRegExp(query)
     const expected = sampleData.filter(album => {
-      const re = new RegExp(escapedQuery, 'gi');
-      return album.title.match(re) || album.artist.match(re);
-    });
-    expect(filteredState.filteredAlbums).toMatchObject(expected);
-  });
-});
+      const re = new RegExp(escapedQuery, 'gi')
+      return album.title.match(re) || album.artist.match(re)
+    })
+    expect(filteredState.filteredAlbums).toMatchObject(expected)
+  })
+})
 ```
 
 Now, the question is where to escape? We could just escape in the reducer, but I'm going to err on the side of caution and also escape in component before `setState`. Though that will require an integration test to verify.
@@ -1699,11 +1694,11 @@ Now, the question is where to escape? We could just escape in the reducer, but I
 // ...other tests
 
 it('should escape special characters the user types into the search field', () => {
-  const query = '(space';
-  cy.get('button[data-cy="searchButton"]').click();
-  cy.get('input[data-cy=searchAlbums]').type(query);
-  cy.get('[data-cy=Card]').should('have.lengthOf', 1);
-});
+  const query = '(space'
+  cy.get('button[data-cy="searchButton"]').click()
+  cy.get('input[data-cy=searchAlbums]').type(query)
+  cy.get('[data-cy=Card]').should('have.lengthOf', 1)
+})
 ```
 
 Now, let's escape and sanitize that input in the `AlbumGrid` component before it gets set to state. We're going to let a couple special characters through (in case they're used in obscure album names).

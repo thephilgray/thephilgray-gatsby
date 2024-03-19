@@ -70,7 +70,7 @@ const Header = ({ location }) => (
     <StyledNav>
       <Link
         to="/blog"
-        aria-current={(location.pathname === '/' || location.pathname.split('/').includes('blog')) && 'page'}
+        aria-current={location.pathname.split('/').includes('blog') && 'page'}
       >
         Blog
       </Link>
@@ -82,7 +82,15 @@ const Header = ({ location }) => (
       >
         Projects
       </Link>
-      <Link to="/resume">Resume</Link>
+      <Link
+        to="/resume"
+        aria-current={
+          location.pathname === '' ||
+          (location.pathname.split('/').includes('resume') && 'page')
+        }
+      >
+        Resume
+      </Link>
     </StyledNav>
   </HeaderWrapper>
 )

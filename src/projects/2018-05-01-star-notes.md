@@ -6,6 +6,7 @@ category: demo
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/Image+2018-06-08+at+12.23.34+PM.png
 tags: VueJS, Vuex, Vuetify, Axios, Firebase, Github API
 date: 2018-05-01
+archived: true
 ---
 
 ##### Inspiration

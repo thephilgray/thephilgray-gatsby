@@ -5,6 +5,7 @@ tags: JavaScript, React, Node, Mongo, Express, Webpack, Redux, Testing, Jest, Cy
 abstract: This is the first part of a series of posts where I describe step-by-step how to build an app from scratch using Mongo, Express, React, and Node. Using the example of a simple CRUD app that allows users upload album artwork and rate albums, I'll touch on configuring Webpack, linting, end-to-end testing, Redux, serverless functions, and more.
 date: 2018-06-08
 draft: false
+archived: true
 ---
 
 The project source code can be found here: [https://github.com/thephilgray/review-react-2018/tree/master/005_mern](https://github.com/thephilgray/review-react-2018/tree/master/005_mern). A screenshot of the original Figma mockup along with the original Vue prototype can be found here: [https://github.com/thephilgray/designs-2018/tree/master/000_album-collector](https://github.com/thephilgray/designs-2018/tree/master/000_album-collector).
@@ -74,11 +75,11 @@ The `React` code is in the `client` directory, the `Express` and `Mongo` code is
 - Touch `webpack.config.js`
 
 ```js
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
-const outputDirectory = 'dist';
+const outputDirectory = 'dist'
 
 module.exports = {
   entry: './src/client/index.js', // where the application starts executing and webpack starts bundling
@@ -86,7 +87,7 @@ module.exports = {
     // the target directory and filename for the bundled output
     // __dirname is the directory name of the current module (this config file)
     path: path.join(__dirname, outputDirectory),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -94,32 +95,32 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader' // transform jsx to js
-        }
+          loader: 'babel-loader', // transform jsx to js
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'] // use css-loader to handler any css files
-      }
-    ]
+        use: ['style-loader', 'css-loader'], // use css-loader to handler any css files
+      },
+    ],
   },
   devServer: {
     port: 3000, // listen to port 3000
     open: true, // open home page on startup
     proxy: {
       // for when you have a separate API backend development server and you want to send API requests on the same domain
-      '/api': 'http://localhost:8080'
-    }
+      '/api': 'http://localhost:8080',
+    },
   },
   plugins: [
     new CleanWebpackPlugin([outputDirectory]), // remove the build files before building
     new HtmlWebpackPlugin({
       // loads the template at public/index.html and injects the output bundle
       template: './public/index.html',
-      favicon: './public/favicon.ico'
-    })
-  ]
-};
+      favicon: './public/favicon.ico',
+    }),
+  ],
+}
 ```
 
 - Touch `nodemon.json`. This watches for any changes in the server source in dev mode and restarts the server.
@@ -134,16 +135,16 @@ module.exports = {
 - Touch `src/server/sampledata.json`
 
 ```js
-const express = require('express');
+const express = require('express')
 
-const data = require('./sampledata.json');
+const data = require('./sampledata.json')
 
-const app = express();
+const app = express()
 
-const port = process.env.PORT || 8080;
-app.use(express.static('dist'));
-app.get('/api/albums', (req, res) => res.send(data));
-app.listen(port, () => console.log(`Listening on http://localhost:${port}`));
+const port = process.env.PORT || 8080
+app.use(express.static('dist'))
+app.get('/api/albums', (req, res) => res.send(data))
+app.listen(port, () => console.log(`Listening on http://localhost:${port}`))
 ```
 
 - npm init and write run scripts in `package.json`
@@ -167,26 +168,26 @@ yarn add -D babel-core babel-jest babel-loader babel-preset-env babel-plugin-tra
 - Create `src/client` and touch `index.js`
 
 ```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 - Touch `App.js`
 
 ```js
-import React from 'react';
-import axios from 'axios';
+import React from 'react'
+import axios from 'axios'
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { albums: null };
+    super(props)
+    this.state = { albums: null }
   }
   componentDidMount() {
-    axios.get('/api/albums').then(res => this.setState({ albums: res.data }));
+    axios.get('/api/albums').then(res => this.setState({ albums: res.data }))
   }
   render() {
     return (
@@ -197,7 +198,7 @@ export default class App extends React.Component {
           <p>Loading....</p>
         )}
       </div>
-    );
+    )
   }
 }
 ```
@@ -249,18 +250,18 @@ yarn add -D mongoose
 - Create `src/server/database/index.js`
 
 ```js
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development'
 const databaseUrl =
-  process.env.DATABASE_URL || `mongodb://localhost/mern_${env}`;
+  process.env.DATABASE_URL || `mongodb://localhost/mern_${env}`
 
 module.exports = {
   mongoose,
-  databaseUrl
-};
+  databaseUrl,
+}
 ```
 
 - Connect to mongoose before starting the express app
@@ -304,82 +305,80 @@ _Later, we'll set the DATABASE_URL in `.env` to connect to a Mongo db on MLAB wh
 - Write a test for GET `/`
 
 ```js
-const { assert } = require('chai');
-const request = require('supertest');
+const { assert } = require('chai')
+const request = require('supertest')
 
-const app = require('../../server/');
+const app = require('../../server/')
 
 describe('GET `/api`', () => {
   it('should return a JSON message and a status of 200', async () => {
-    const response = await request(app).get('/api');
+    const response = await request(app).get('/api')
 
-    assert.equal(response.status, 200);
+    assert.equal(response.status, 200)
     assert.include(response.body, {
-      message: 'root'
-    });
-  });
-});
+      message: 'root',
+    })
+  })
+})
 ```
 
 - Touch 'src/server/routes/index.js'
 
 ```js
-const router = require('express').Router();
+const router = require('express').Router()
 
 router.get('/', (req, res) => {
   res.json({
-    message: 'root'
-  });
-});
+    message: 'root',
+  })
+})
 
-module.exports = router;
+module.exports = router
 ```
 
 - Update express app to use route and run on a separate port for testing
 
 ```js
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
+const express = require('express')
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
-const { mongoose, databaseUrl } = require('./database');
-const routes = require('./routes');
+const { mongoose, databaseUrl } = require('./database')
+const routes = require('./routes')
 
-const app = express();
+const app = express()
 
-app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(morgan('dev'))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', '*')
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Request-With, Content-Type, Accept, Authorization'
-  );
+  )
   if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-    return res.status(200).json({});
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET')
+    return res.status(200).json({})
   }
-  next();
-});
-app.use(express.static('dist'));
+  next()
+})
+app.use(express.static('dist'))
 
-app.use('/api/', routes);
+app.use('/api/', routes)
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080
 if (process.env.NODE_ENV === 'test') {
   mongoose.connect(databaseUrl).then(() => {
-    app.listen(7000, () => console.log('Listening on http://localhost:7000'));
-  });
+    app.listen(7000, () => console.log('Listening on http://localhost:7000'))
+  })
 } else {
   mongoose.connect(databaseUrl).then(() => {
-    app.listen(port, () =>
-      console.log(`Listening on http://localhost:${port}`)
-    );
-  });
+    app.listen(port, () => console.log(`Listening on http://localhost:${port}`))
+  })
 }
 
-module.exports = app;
+module.exports = app
 ```
 
 - Create a post route to add an album
@@ -387,13 +386,13 @@ module.exports = app;
 ```js
 // src/server/routes/index.test.js
 
-const { assert } = require('chai');
-const request = require('supertest');
+const { assert } = require('chai')
+const request = require('supertest')
 
-const Album = require('../models/');
-const { mongoose, databaseUrl } = require('../database');
+const Album = require('../models/')
+const { mongoose, databaseUrl } = require('../database')
 
-const app = require('../../server/');
+const app = require('../../server/')
 
 const newAlbum = {
   title: 'Space is the Place',
@@ -401,84 +400,84 @@ const newAlbum = {
   art:
     'https://upload.wikimedia.org/wikipedia/en/6/6c/Space_Is_The_Place_album_cover.jpg',
   year: '1973',
-  rating: 5
-};
+  rating: 5,
+}
 
 // setup and teardown utilities
 async function connectDatabase() {
-  await mongoose.connect(databaseUrl);
-  await mongoose.connection.db.dropDatabase();
+  await mongoose.connect(databaseUrl)
+  await mongoose.connection.db.dropDatabase()
 }
 
 async function disconnectDatabase() {
-  await mongoose.connection.db.dropDatabase();
-  await mongoose.disconnect();
+  await mongoose.connection.db.dropDatabase()
+  await mongoose.disconnect()
 }
 
 describe('/api/albums', async () => {
   // setup and teardown utilities
-  beforeEach(connectDatabase);
-  afterEach(disconnectDatabase);
+  beforeEach(connectDatabase)
+  afterEach(disconnectDatabase)
 
   describe('Server path: `/api/albums/add`', () => {
     describe('POST', () => {
       it('should return a `201` status code when creating a new album', async () => {
         const response = await request(app)
           .post('/api/albums/add')
-          .send(newAlbum);
+          .send(newAlbum)
 
-        assert.equal(response.status, 201);
-      });
-    });
-  });
-});
+        assert.equal(response.status, 201)
+      })
+    })
+  })
+})
 
 // src/server/routes/index.js
 
-const router = require('express').Router();
+const router = require('express').Router()
 
-const Album = require('../models');
+const Album = require('../models')
 
 router.get('/albums', async (req, res) => {
-  const albums = await Album.find({}).exec();
-  res.json(albums);
-});
+  const albums = await Album.find({}).exec()
+  res.json(albums)
+})
 
 router.post('/albums/add', async (req, res) => {
-  const newAlbum = await new Album(req.body);
-  await newAlbum.save();
-  const album = await Album.findOne(req.body);
-  res.status(201).json(album);
-});
+  const newAlbum = await new Album(req.body)
+  await newAlbum.save()
+  const album = await Album.findOne(req.body)
+  res.status(201).json(album)
+})
 
-module.exports = router;
+module.exports = router
 ```
 
 - Create the model
 - Touch `src/server/models/index.js`
 
 ```js
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const albumSchema = new mongoose.Schema({
   title: {
-    type: String
+    type: String,
   },
   artist: {
-    type: String
+    type: String,
   },
   art: {
-    type: String
+    type: String,
   },
   year: {
-    type: String
+    type: String,
   },
   rating: {
-    type: Number
-  }
-});
+    type: Number,
+  },
+})
 
-module.exports = mongoose.model('Album', albumSchema);
+module.exports = mongoose.model('Album', albumSchema)
 ```
 
 - Get all albums
@@ -490,22 +489,22 @@ module.exports = mongoose.model('Album', albumSchema);
 
 describe('GET `/api/albums`', () => {
   it('should return a status of 200', async () => {
-    const response = await request(app).get('/api/albums');
+    const response = await request(app).get('/api/albums')
 
-    assert.equal(response.status, 200);
-  });
+    assert.equal(response.status, 200)
+  })
 
   it('should return an array of albums', async () => {
     await request(app)
       .post('/api/albums/add')
-      .send(newAlbum);
+      .send(newAlbum)
 
-    const response = await request(app).get('/api/albums');
+    const response = await request(app).get('/api/albums')
 
-    assert.include(JSON.stringify(response.body), newAlbum.title);
-    assert.equal(response.body.length, 1);
-  });
-});
+    assert.include(JSON.stringify(response.body), newAlbum.title)
+    assert.equal(response.body.length, 1)
+  })
+})
 ```
 
 ## Feature Testing
@@ -623,9 +622,9 @@ _Disclaimer: This is my first time to test drive Cypress._ 🎉
 
 describe('App intitialization', () => {
   it.only('should contain the `CardGrid` component', () => {
-    cy.visit('/').get('.CardGrid');
-  });
-});
+    cy.visit('/').get('.CardGrid')
+  })
+})
 ```
 
 - Start the `Webpack` dev server with `yarn dev` and then `Cypress` with `yarn cypress` and click `Run All Tests`
@@ -635,15 +634,15 @@ describe('App intitialization', () => {
 ```js
 // src/client/components/CardGrid.js
 
-import React from 'react';
+import React from 'react'
 
 const CardGrid = () => (
   <div className="CardGrid">
     <p>Card</p>
   </div>
-);
+)
 
-export default CardGrid;
+export default CardGrid
 ```
 
 - Import and use this component inside the `App` component, removing the old code that fetched data directly from the server
@@ -651,20 +650,20 @@ export default CardGrid;
 ```js
 // src/client/App.js
 
-import React from 'react';
+import React from 'react'
 
-import CardGrid from './components/CardGrid';
+import CardGrid from './components/CardGrid'
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
     return (
       <div>
         <CardGrid />
       </div>
-    );
+    )
   }
 }
 ```
@@ -675,7 +674,7 @@ The first test should now be passing. But we're not done with it. We really want
 - Copy the sample data array into this file
 
 ```js
-[
+;[
   {
     _id: '1521567322',
     title: 'Space is the Place',
@@ -683,7 +682,7 @@ The first test should now be passing. But we're not done with it. We really want
     art:
       'https://upload.wikimedia.org/wikipedia/en/6/6c/Space_Is_The_Place_album_cover.jpg',
     year: '1973',
-    rating: 5
+    rating: 5,
   },
   {
     _id: '1521567405',
@@ -691,10 +690,10 @@ The first test should now be passing. But we're not done with it. We really want
     artist: 'Sun Ra',
     art: 'https://upload.wikimedia.org/wikipedia/en/2/22/Lanquidity.jpg',
     year: '1978',
-    rating: 5
-  }
+    rating: 5,
+  },
   // ... other albums
-];
+]
 ```
 
 - Rewrite the test in `app-init.spec.js`
@@ -704,21 +703,21 @@ The first test should now be passing. But we're not done with it. We really want
 
 describe('App intitialization', () => {
   it.only('Loads todos on page load', () => {
-    cy.server();
-    cy.route('GET', '/api/albums', 'fixture:albums');
-    cy.visit('/');
+    cy.server()
+    cy.route('GET', '/api/albums', 'fixture:albums')
+    cy.visit('/')
 
-    cy.get('.CardGrid .Card').should('have.length', 7);
-  });
-});
+    cy.get('.CardGrid .Card').should('have.length', 7)
+  })
+})
 ```
 
 - Touch `src/client/lib/service.js`
 
 ```js
-import axios from 'axios';
+import axios from 'axios'
 
-export const loadAlbums = () => axios.get('/api/albums'); //eslint-disable-line
+export const loadAlbums = () => axios.get('/api/albums') //eslint-disable-line
 ```
 
 - Call `loadAlbums()` in `src/client/App.js`
@@ -731,27 +730,27 @@ export const loadAlbums = () => axios.get('/api/albums'); //eslint-disable-line
  * but the Axios request was moved into a separate file.
  **/
 
-import React from 'react';
-import { loadAlbums } from './lib/service';
-import CardGrid from './components/CardGrid';
+import React from 'react'
+import { loadAlbums } from './lib/service'
+import CardGrid from './components/CardGrid'
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { albums: null };
+    super(props)
+    this.state = { albums: null }
   }
 
   componentDidMount() {
     loadAlbums().then(({ data }) => {
-      this.setState({ albums: data });
-    });
+      this.setState({ albums: data })
+    })
   }
   render() {
     return (
       <div>
         <CardGrid albums={this.state.albums} />
       </div>
-    );
+    )
   }
 }
 ```
@@ -759,8 +758,8 @@ export default class App extends React.Component {
 - Map over a div with the class `.Card` inside the `CardGrid` component
 
 ```js
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const CardGrid = props => (
   <div className="CardGrid">
@@ -772,17 +771,17 @@ const CardGrid = props => (
         ))
       : null}
   </div>
-);
+)
 
 CardGrid.propTypes = {
-  albums: PropTypes.arrayOf(PropTypes.object)
-};
+  albums: PropTypes.arrayOf(PropTypes.object),
+}
 
 CardGrid.defaultProps = {
-  albums: [{}]
-};
+  albums: [{}],
+}
 
-export default CardGrid;
+export default CardGrid
 ```
 
 Now the test is passing, and even though our server is already prepared to handle this api route, we can test the component in isolation by stubbing the request and using fixture data.
@@ -805,13 +804,13 @@ So, let's start to use styled-components and change our tests to use the `data-c
 
 describe('App intitialization', () => {
   it.only('Loads todos on page load', () => {
-    cy.server();
-    cy.route('GET', '/api/albums', 'fixture:albums');
-    cy.visit('/');
+    cy.server()
+    cy.route('GET', '/api/albums', 'fixture:albums')
+    cy.visit('/')
 
-    cy.get('[data-cy=Card]').should('have.length', 7);
-  });
-});
+    cy.get('[data-cy=Card]').should('have.length', 7)
+  })
+})
 ```
 
 - Add `src/client/index.css` to apply global `box-sizing: border-box`.
@@ -852,10 +851,10 @@ If you like styled-components but don't like how it turns your class names into 
 ```js
 // src/client/components/Card.js
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 const CardWrapper = styled.div`
   position: relative;
@@ -872,12 +871,12 @@ const CardWrapper = styled.div`
   &:hover {
     box-shadow: 1px 4px 2px 2px #aaa;
   }
-`;
+`
 
 const CardImage = styled.img`
   width: 100%;
   height: auto;
-`;
+`
 
 const CardImageWrapper = styled.div`
   position: relative;
@@ -887,14 +886,14 @@ const CardImageWrapper = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-`;
+`
 
 const CardBody = styled.div`
   display: flex;
   background: #ddd;
   padding: 0.5em;
   width: 100%;
-`;
+`
 
 const CardDetails = styled.div`
   flex: 60%;
@@ -913,7 +912,7 @@ const CardDetails = styled.div`
     margin-top: 0;
     word-break: break-all;
   }
-`;
+`
 
 const CardControls = styled.div`
   display: flex;
@@ -921,7 +920,7 @@ const CardControls = styled.div`
   width: 2em;
   justify-content: center;
   align-items: center;
-`;
+`
 
 const CardButton = styled.button`
   padding: 0.25em;
@@ -930,12 +929,12 @@ const CardButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-`;
+`
 
 class Card extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = {};
+    super(props)
+    this.state = {}
   }
 
   render() {
@@ -956,7 +955,7 @@ class Card extends React.Component {
           </CardControls>
         </CardBody>
       </CardWrapper>
-    );
+    )
   }
 }
 
@@ -964,15 +963,15 @@ Card.propTypes = {
   artist: PropTypes.string,
   art: PropTypes.string,
   title: PropTypes.string,
-  year: PropTypes.string
-};
+  year: PropTypes.string,
+}
 Card.defaultProps = {
   art: 'http://via.placeholder.com/300x300',
   title: 'Unknown title',
   artist: 'Unknown artist',
-  year: 'Unknown year'
-};
-export default Card;
+  year: 'Unknown year',
+}
+export default Card
 ```
 
 - Use the `Card` component within the `CardGrid` component, passing each `album` object property down as a prop to `Card`
@@ -982,7 +981,7 @@ export default Card;
 
 // ...imports
 
-import Card from './Card';
+import Card from './Card'
 
 const CardGrid = props => (
   <div data-cy="CardGrid">
@@ -990,7 +989,7 @@ const CardGrid = props => (
       ? props.albums.map(album => <Card {...album} key={album._id} />)
       : null}
   </div>
-);
+)
 ```
 
 - Run the test again or if `Cypress` is still open, refresh it. It should now pass.
@@ -1012,10 +1011,10 @@ yarn add --D enzyme enzyme-adapter-react-16 enzyme-to-json
 ```js
 // setupTests.js
 
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
 
-configure({ adapter: new Adapter() });
+configure({ adapter: new Adapter() })
 ```
 
 - Add `setupTestFrameworkScriptFile` path to `jest` config in `package.json`
@@ -1034,22 +1033,22 @@ configure({ adapter: new Adapter() });
 ```js
 // src/client/__tests__/Card.test.js
 
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from 'react'
+import { shallow } from 'enzyme'
 
-import Card from '../components/Card';
+import Card from '../components/Card'
 
 describe('Card', () => {
   it('renders', () => {
-    const wrapper = shallow(<Card />);
-    expect(wrapper).toMatchSnapshot();
-  });
+    const wrapper = shallow(<Card />)
+    expect(wrapper).toMatchSnapshot()
+  })
 
   it('should render a card title by default', () => {
-    const wrapper = shallow(<Card />);
-    expect(wrapper.find('h3').text()).toBe('Unknown title');
-  });
-});
+    const wrapper = shallow(<Card />)
+    expect(wrapper.find('h3').text()).toBe('Unknown title')
+  })
+})
 ```
 
 TODO: review [https://www.robinwieruch.de/react-testing-tutorial/](https://www.robinwieruch.de/react-testing-tutorial/)
@@ -1131,15 +1130,15 @@ yarn storybook
 - Import a component and add a story to `stories/index.stories.js`
 
 ```js
-import React from 'react';
+import React from 'react'
 // ...boilerplate imports
-import { storiesOf } from '@storybook/react';
+import { storiesOf } from '@storybook/react'
 
-import Card from '../src/client/components/Card';
+import Card from '../src/client/components/Card'
 
 // ...boilerplate stories
 
-storiesOf('Card', module).add('default', () => <Card />);
+storiesOf('Card', module).add('default', () => <Card />)
 ```
 
 Storybook runs outside of your app, and really forces you to think about how your components look and function in isolation. This is great if you any notion of reusing them elsewhere or building up a UI library. But keep in mind, you'll have to bring or mock your own state, global styles, and Webpack configuration.

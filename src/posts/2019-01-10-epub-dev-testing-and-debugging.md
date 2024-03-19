@@ -5,6 +5,7 @@ tags: EPUB, E-books, Node, JavaScript, Testing, Cypress, CLI, Android, Mobile
 abstract: Approaches to testing and debugging scripted EPUBs during development, including in the browser, Apple Books, emulators, and physical devices. Also, introduces two small tools I created to improve development experience.
 date: 2019-01-10
 draft: false
+archived: true
 ---
 
 ### EPUB Dev Testing
