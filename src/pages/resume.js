@@ -71,7 +71,7 @@ const ResumeLayout = styled.div`
   }
 
   @media print {
-    font-size: 50%;
+    font-size: 55%;
 
     header {
       display: flex;
@@ -99,6 +99,20 @@ const ResumeLayout = styled.div`
 const ResumeSection = styled.section`
   @media print {
     page-break-before: ${({ pageBreak }) => (pageBreak ? 'always' : 'inherit')};
+  }
+`
+
+const SkillsToolsAndEducationLayout = styled.div`
+  @media only screen and (min-width: 768px), print {
+    display: grid;
+    grid-gap: 1em;
+    grid-column: col 3 / span 2;
+    grid-row: row 2;
+    grid-template-columns: 1fr 1fr;
+
+    .skills-and-tools {
+      grid-column: 1 / 3;
+    }
   }
 `
 
@@ -207,44 +221,46 @@ const Resume = () => (
               <h2>Overview</h2>
               <p>{overview}</p>
             </ResumeSection>
-            <ResumeSection className="skills-and-tools">
-              <div className="tools">
-                <h2>Tools</h2>
-                <p className="tools__text">
-                  {tools.map((tool, i) => (
-                    <span key={tool || `tool-${i}`}>{`${tool +
-                      (i === tools.length - 1 ? '' : ', ')}`}</span>
-                  ))}
-                </p>
-              </div>
-            </ResumeSection>
-            {/* <ResumeSection>
+            <SkillsToolsAndEducationLayout>
+              <ResumeSection className="skills-and-tools">
+                <div className="tools">
+                  <h2>Tools</h2>
+                  <p className="tools__text">
+                    {tools.map((tool, i) => (
+                      <span key={tool || `tool-${i}`}>{`${tool +
+                        (i === tools.length - 1 ? '' : ', ')}`}</span>
+                    ))}
+                  </p>
+                </div>
+              </ResumeSection>
+              {/* <ResumeSection>
               <h2>Projects</h2>
             </ResumeSection> */}
-            <ResumeSection>
-              <h2>Education</h2>
-              {education.map((school, i) => (
-                <p key={school.title || `school-${i}`}>
-                  {school.title}, {school.location}
-                  <br />
-                  {school.degree} ({school.years}), {school.concentration},{' '}
-                  {school.honors}
+              <ResumeSection className="certifications">
+                <h2>Certifications</h2>
+                <p>
+                  {certifications.map((cert, i) => (
+                    <React.Fragment key={cert.title || `cert-${i}`}>
+                      <span>
+                        {cert.title} ({cert.years})
+                      </span>
+                      <br />
+                    </React.Fragment>
+                  ))}
                 </p>
-              ))}
-            </ResumeSection>
-            <ResumeSection>
-              <h2>Certifications</h2>
-              <p>
-                {certifications.map((cert, i) => (
-                  <React.Fragment key={cert.title || `cert-${i}`}>
-                    <span>
-                      {cert.title} ({cert.years})
-                    </span>
+              </ResumeSection>
+              <ResumeSection className="education">
+                <h2>Education</h2>
+                {education.map((school, i) => (
+                  <p key={school.title || `school-${i}`}>
+                    {school.title}, {school.location}
                     <br />
-                  </React.Fragment>
+                    {school.degree} ({school.years}), {school.concentration},{' '}
+                    {school.honors}
+                  </p>
                 ))}
-              </p>
-            </ResumeSection>
+              </ResumeSection>
+            </SkillsToolsAndEducationLayout>
             <ResumeSection pageBreak={false}>
               <h2>Relevant Experience</h2>
               <RelevantExperienceLayout>

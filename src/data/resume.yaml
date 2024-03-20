@@ -21,14 +21,14 @@ education:
     concentration: minor in Writing
     honors: summa cum laude, 3.9 GPA
 certifications:
-  - title: AWS Certified Solutions Architect – Associate
-    years: '2021 – 2024'
-  - title: AWS Certified Cloud Practitioner
-    years: '2020 – 2023, inactive'
-  - title: '(MCSD: 70-480) Programming in HTML5 with JavaScript and CSS3'
+  - title: AWS Solutions Architect Associate
+    years: '2021'
+  - title: AWS Cloud Practitioner
+    years: '2020'
+  - title: 'MCSD Programming in HTML5 with JavaScript and CSS3'
     years: '2014'
   - title: Comp TIA Security+ Certification
-    years: '2013 – 2016, inactive'
+    years: '2013'
 experience:
   - company: Capital One
     years: 04/2021 – present
@@ -36,27 +36,27 @@ experience:
     titles:
       - Principal Associate Software Engineer – 07/2023 - present
       - Senior Associate Software Engineer – 04/2021 – 07/2023
-    description: Contributed to fullstack, cross platform solutions such as a MFA flow for draft credit card applications, end-to-end KYC flows, serverless migrations and re-architectures of microservices, and developer and agent tooling.
+    description: Contributed to fullstack, cross-platform solutions such as a MFA flow for draft credit card applications, end-to-end KYC flows, serverless migrations, architectures, and re-architectures of microservices, and developer and customer service tooling.
   - company: Generali Global Assistance North America
     years: 09/2019 – 04/2021
     location: Washington, DC
     titles:
       - Fullstack Engineer, 04/2020 – 04/2021
       - Frontend Developer, 09/2019 – 04/2020
-    description: Developed frontend features and tooling, contributed to migrations to React and serverless AWS infrastructure. Led several efforts to automate manual processes and embrace best practices with regards to React, JavaScript, and testing.
+    description: Developed frontend features and tooling, contributed to migrations to React and serverless AWS infrastructure. Initiated efforts to automate manual processes and embrace best practices for React, JavaScript, and testing.
   - company: National Capitol Contracting
     years: 07/2018 – 09/2019
     location: Arlington, VA
     titles:
       - ePublications Technical Specialist
-    description: Designed and developed interactive EPUBs and e-book plugins for language instructors at the Department of State Foreign Services Institute using HTML5, CSS3, and JavaScript. Created a framework for quickly scaffolding, developing locally with a dev server, testing on real and simulated devices (iPhone, iPad, Android, Web), and bundling EPUBs on par with web frontend tooling.
+    description: Designed and developed interactive EPUBs and e-book plugins for language instructors at the Department of State Foreign Services Institute using HTML5, CSS3, and JavaScript. Proposed and created a framework and dev server for quickly scaffolding, developing locally, testing on real and simulated devices, and bundling EPUBs on par with web frontend tooling.
   - company: 'BSA | The Software Alliance'
     years: 04/2015 – 07/2018
     location: Washington, DC
     titles:
       - Independent Consultant, 11/2017 - 07/2018
       - Digital Manager, 04/2015 - 11/2017
-    description: Designed and developed frontend features, themes, emails, surveys, analytics, dashboards, and microsites using HTML5, CSS3, JavaScript, PHP, WordPress, static site generators, and frontend frameworks. Championed a successful transition to mobile-first responsive design.
+    description: Designed and developed frontend features, themes, emails, surveys, analytics, dashboards, and microsites using HTML5, CSS3, JavaScript, PHP, WordPress, static site generators, and frontend frameworks. Championed a transition to mobile-first responsive design.
   # - company: ProSol
   #   years: 11/2014 – 04/2015
   #   location: Washington, DC
