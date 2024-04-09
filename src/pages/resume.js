@@ -221,6 +221,28 @@ const Resume = () => (
               <h2>Overview</h2>
               <p>{overview}</p>
             </ResumeSection>
+            <ResumeSection pageBreak={false}>
+              <h2>Relevant Experience</h2>
+              <RelevantExperienceLayout>
+                {experience.map((ex, i) => (
+                  <RelevantExperienceItem key={ex.company || `ex-${i}`}>
+                    <div className="relevant-experience__info">
+                      <span className="relevant-experience__years">
+                        {ex.years}
+                      </span>
+                      <div className="relevant-experience__location">
+                        <small>{ex.location}</small>
+                      </div>
+                    </div>
+                    <h3>{ex.company}</h3>
+                    {ex.titles.map((jobTitle, i) => (
+                      <h4 key={jobTitle || `jobTitle-${i}`}>{jobTitle}</h4>
+                    ))}
+                    <p>{ex.description}</p>
+                  </RelevantExperienceItem>
+                ))}
+              </RelevantExperienceLayout>
+            </ResumeSection>
             <SkillsToolsAndEducationLayout>
               <ResumeSection className="skills-and-tools">
                 <div className="tools">
@@ -261,28 +283,6 @@ const Resume = () => (
                 ))}
               </ResumeSection>
             </SkillsToolsAndEducationLayout>
-            <ResumeSection pageBreak={false}>
-              <h2>Relevant Experience</h2>
-              <RelevantExperienceLayout>
-                {experience.map((ex, i) => (
-                  <RelevantExperienceItem key={ex.company || `ex-${i}`}>
-                    <div className="relevant-experience__info">
-                      <span className="relevant-experience__years">
-                        {ex.years}
-                      </span>
-                      <div className="relevant-experience__location">
-                        <small>{ex.location}</small>
-                      </div>
-                    </div>
-                    <h3>{ex.company}</h3>
-                    {ex.titles.map((jobTitle, i) => (
-                      <h4 key={jobTitle || `jobTitle-${i}`}>{jobTitle}</h4>
-                    ))}
-                    <p>{ex.description}</p>
-                  </RelevantExperienceItem>
-                ))}
-              </RelevantExperienceLayout>
-            </ResumeSection>
           </ResumeLayout>
         )
       }}
