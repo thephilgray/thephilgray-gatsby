@@ -22,6 +22,7 @@ const ProjectPostHeader = styled.header`
   .projectPost__headerContent {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   h2 {
     flex: 3 0 75%;
@@ -109,6 +110,7 @@ function ProjectPost({ data }) {
             </div>
           </JumboWrapper>
         </ProjectPostHeader>
+        <p style={{ textAlign: 'right' }}>{markdownRemark.frontmatter.date}</p>
         <ProjectPostBody
           dangerouslySetInnerHTML={{ __html: markdownRemark.html }}
         />

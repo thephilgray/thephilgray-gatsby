@@ -6,7 +6,7 @@ const Image = () => (
     src="../images/profile.png"
     alt="headshot of Phil Gray"
     placeholder="blurred"
-    layout="fullWidth"
+    layout="constrained"
     width={200}
   />
 )

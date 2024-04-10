@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import TagCloud from './TagCloud'
 
 const ProjectGridItemLayout = styled.div`
-  height: 400px;
+  // height: 400px;
   position: relative;
   overflow: hidden;
   margin: 0.5em;
@@ -15,6 +15,7 @@ const ProjectGridItemLayout = styled.div`
     0 1px 3px 0 rgba(0, 0, 0, 0.12);
   transition: transform 0.1s cubic-bezier(0.17, 0.67, 0.34, 1.54),
     -webkit-transform 0.1s cubic-bezier(0.17, 0.67, 0.34, 1.54);
+  max-width: 600px;
 
   &:hover {
     transform: skewX(0.7deg) scale(1.1);
@@ -25,7 +26,7 @@ const ProjectGridItemLayout = styled.div`
 `
 
 const ProjectGridItemContent = styled.div`
-  display: flex;
+  // display: flex;
   position: relative;
   padding: 1em;
   background-image: ${({ theme }) =>
@@ -38,8 +39,12 @@ const ProjectGridItemContent = styled.div`
   background-repeat: no-repeat;
   flex-wrap: wrap;
   background-blend-mode: normal;
-  h4, p{
+  h4,
+  p {
     width: 100%;
+  }
+  .tagsContainer {
+    margin-top: auto;
   }
 `
 
@@ -63,7 +68,7 @@ function ProjectGridItem({ title, description, tags, link, image }) {
       <ProjectGridItemContent>
         <h4>{title}</h4>
         <p>{description}</p>
-        <div>
+        <div className="tagsContainer">
           <TagCloud tags={tags} max={6} linked={false} />
         </div>
       </ProjectGridItemContent>

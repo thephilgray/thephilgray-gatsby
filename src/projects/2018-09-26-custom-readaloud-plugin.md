@@ -5,7 +5,7 @@ category: work
 image: https://s3.amazonaws.com/pg-image-host/thepg/screens/customreadaloud.png
 tags: JavaScript, EPUB, E-books, Webpack
 date: 2018-09-26
-archived: true
+# archived: true
 ---
 
 ### Overview
@@ -58,6 +58,12 @@ matching text chunk. A rule for this CSS class can be added to the
 stylesheet to create a highlight effect. Each time the class is added to
 an element containing a chunk of text, it is removed from any other
 elements that may have been previously \"highlighted\".
+
+<iframe height="300" style="width: 100%;" scrolling="no" title="Custom Read Aloud Plugin Demo #1" src="https://codepen.io/phillipgray/embed/preview/bOmeed?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/phillipgray/pen/bOmeed">
+  Custom Read Aloud Plugin Demo #1</a> by Phillip Gray (<a href="https://codepen.io/phillipgray">@phillipgray</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
 
 **Link to repo**: [https://github.com/thephilgray/custom-readaloud-plugin](https://github.com/thephilgray/custom-readaloud-plugin)
 
